@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
-import type { TooltipValueType } from "recharts"
+// import type { TooltipValueType } from "recharts"
 import { cn } from "@/lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -136,11 +136,11 @@ function ChartTooltipContent({
     nameKey?: string
     labelKey?: string
   } & Omit<
-    RechartsPrimitive.DefaultTooltipContentProps<
-      TooltipValueType,
-      TooltipNameType
-    >,
-    "accessibilityLayer"
+  RechartsPrimitive.DefaultTooltipContentProps<
+    number | string,
+    TooltipNameType
+  >,
+  "accessibilityLayer"
   >) {
   const { config } = useChart()
 
