@@ -20,11 +20,11 @@ import {
 
 export const description = "An interactive bar chart"
 
-const chartConfig = {
+const chartConfig: ChartConfig = {
   views: { label: "Sales" },
   thisMonthRevenue: { label: "This month", color: "#262626" },
   lastMonthRevenue: { label: "Last month", color: "#9CA3AF" },
-} satisfies ChartConfig
+}
 
 export function ChartBarInteractive() {
   const [activeChart, setActiveChart] =
