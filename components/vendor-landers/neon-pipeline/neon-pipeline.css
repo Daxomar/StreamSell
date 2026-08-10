@@ -1,0 +1,160 @@
+/* Chromatic Glass — Neon Pipeline light theme */
+
+.np-mesh-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(0, 212, 170, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 10%, rgba(255, 0, 110, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 70% at 50% 90%, rgba(3, 86, 62, 0.14) 0%, transparent 55%),
+    #ffffff;
+}
+
+.np-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes np-chromatic-shift {
+  0%, 100% {
+    text-shadow:
+      -2px 0 rgba(255, 0, 110, 0.55),
+      2px 0 rgba(0, 212, 170, 0.55),
+      0 0 40px rgba(3, 86, 62, 0.08);
+  }
+  33% {
+    text-shadow:
+      3px -1px rgba(255, 0, 110, 0.6),
+      -3px 1px rgba(0, 212, 170, 0.5),
+      0 0 50px rgba(255, 0, 110, 0.06);
+  }
+  66% {
+    text-shadow:
+      -1px 2px rgba(0, 212, 170, 0.55),
+      1px -2px rgba(3, 86, 62, 0.45),
+      0 0 45px rgba(0, 212, 170, 0.08);
+  }
+}
+
+.np-chromatic-text {
+  color: #0a0a0a;
+  animation: np-chromatic-shift 4s ease-in-out infinite;
+}
+
+.np-chromatic-layers {
+  position: relative;
+  display: inline-block;
+}
+
+.np-chromatic-layers span {
+  display: block;
+}
+
+.np-chromatic-layers .np-layer-base {
+  position: relative;
+  z-index: 3;
+  color: #111;
+}
+
+.np-chromatic-layers .np-layer-magenta,
+.np-chromatic-layers .np-layer-teal {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.np-chromatic-layers .np-layer-magenta {
+  color: #ff006e;
+  transform: translate(-3px, -1px);
+  opacity: 0.65;
+  animation: np-layer-drift-m 3.2s steps(2) infinite;
+}
+
+.np-chromatic-layers .np-layer-teal {
+  color: #00d4aa;
+  transform: translate(3px, 1px);
+  opacity: 0.6;
+  animation: np-layer-drift-t 2.8s steps(2) infinite reverse;
+}
+
+@keyframes np-layer-drift-m {
+  0%, 100% { transform: translate(-3px, -1px); clip-path: inset(0 0 55% 0); }
+  50% { transform: translate(-5px, 0); clip-path: inset(45% 0 0 0); }
+}
+
+@keyframes np-layer-drift-t {
+  0%, 100% { transform: translate(3px, 1px); clip-path: inset(0 55% 0 0); }
+  50% { transform: translate(5px, -1px); clip-path: inset(0 0 0 45%); }
+}
+
+.np-glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 4px 24px rgba(3, 86, 62, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.np-glass-strong {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.45) 100%);
+  backdrop-filter: blur(32px) saturate(1.6);
+  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 24px 80px rgba(3, 86, 62, 0.08),
+    0 8px 32px rgba(255, 0, 110, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.np-pipeline-step {
+  opacity: 0.25;
+  transform: scale(0.92) translateY(12px);
+  filter: blur(1px);
+  transition: none;
+}
+
+.np-pipeline-step.is-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+.np-pipeline-line {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.np-stat-bar {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+@keyframes np-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.np-scan-line {
+  animation: np-scan 3s ease-in-out infinite;
+}
+
+.np-cta-glow {
+  box-shadow:
+    0 0 0 1px rgba(3, 86, 62, 0.15),
+    0 8px 32px rgba(3, 86, 62, 0.2),
+    0 0 60px rgba(0, 212, 170, 0.15);
+}
+
+.np-cta-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 0, 110, 0.2),
+    0 12px 40px rgba(3, 86, 62, 0.25),
+    0 0 80px rgba(255, 0, 110, 0.12);
+}

@@ -1,0 +1,76 @@
+@keyframes lander-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes lander-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes lander-pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.6); }
+}
+
+@keyframes lander-fluid {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes lander-grid-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+@keyframes lander-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lander-glitch {
+  0%, 100% { text-shadow: 2px 0 #00ff88, -2px 0 #ff006e; }
+  25% { text-shadow: -2px 0 #00ff88, 2px 0 #ff006e; }
+  50% { text-shadow: 2px 2px #00ff88, -2px -2px #ff006e; }
+  75% { text-shadow: -2px 2px #00ff88, 2px -2px #ff006e; }
+}
+
+.lander-animate-float { animation: lander-float 4s ease-in-out infinite; }
+.lander-animate-marquee { animation: lander-marquee 20s linear infinite; }
+.lander-animate-pulse-glow { animation: lander-pulse-glow 2s ease-in-out infinite; }
+.lander-animate-fluid {
+  background-size: 400% 400%;
+  animation: lander-fluid 12s ease infinite;
+}
+.lander-animate-fade-up { animation: lander-fade-up 0.8s ease forwards; }
+.lander-animate-glitch { animation: lander-glitch 3s steps(2) infinite; }
+
+.lander-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.lander-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.lander-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.lander-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.lander-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+.lander-particle-grid {
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(3, 86, 62, 0.15) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(3, 86, 62, 0.1) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.lander-neon-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.07) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.lander-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
