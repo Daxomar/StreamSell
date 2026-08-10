@@ -259,21 +259,27 @@ export default function Home() {
           </video> */}
 
           <video
-  ref={videoRef}
-  autoPlay
-  muted
-  loop
-  playsInline
-  preload="metadata"
-  poster="/Hero.png"
-  onCanPlay={() => setVideoReady(true)}
-  className="absolute inset-0 h-full w-full object-cover"
->
-  <source
-    src="https://res.cloudinary.com/db3rq2cce/video/upload/vecteezy_close-up-hands-typing-mobile-phone-and-scrolls-through_3471366_cnu5ej.mp4"
-    type="video/mp4"
-  />
-</video>
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/Hero.png"
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            {/* Mobile screens (max width 768px): gets scaled down & compressed */}
+            <source
+              media="(max-width: 768px)"
+              src="https://res.cloudinary.com/db3rq2cce/video/upload/w_720,q_auto,vc_h264,f_mp4/v1/hero-bg-mobile_a45exx.mp4"
+              type="video/mp4"
+            />
+
+            {/* Desktop / Large screens: gets full quality / original size */}
+            <source
+              src="https://res.cloudinary.com/db3rq2cce/video/upload/q_auto,vc_h264,f_mp4/v1/hero-bg-mobile_a45exx.mp4"
+              type="video/mp4"
+            />
+          </video>
 
           {/* ...rest of your hero unchanged... */}
           <div className="absolute inset-0 bg-[#262626]/15" />
