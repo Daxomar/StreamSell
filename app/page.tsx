@@ -245,7 +245,7 @@ export default function Home() {
           id="hero"
           className="relative flex h-dvh flex-col items-center py-4 justify-between"
         >
-          <video
+          {/* <video
             ref={videoRef}
             autoPlay
             muted
@@ -256,7 +256,24 @@ export default function Home() {
             className="absolute inset-0 h-full w-full object-cover"
           >
             <source src="/videos/hero-bg-two.mp4" type="video/mp4" />
-          </video>
+          </video> */}
+
+          <video
+  ref={videoRef}
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="metadata"
+  poster="/Hero.png"
+  onCanPlay={() => setVideoReady(true)}
+  className="absolute inset-0 h-full w-full object-cover"
+>
+  <source
+    src="https://res.cloudinary.com/db3rq2cce/video/upload/vecteezy_close-up-hands-typing-mobile-phone-and-scrolls-through_3471366_cnu5ej.mp4"
+    type="video/mp4"
+  />
+</video>
 
           {/* ...rest of your hero unchanged... */}
           <div className="absolute inset-0 bg-[#262626]/15" />
