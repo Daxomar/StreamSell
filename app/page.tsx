@@ -117,6 +117,30 @@ const NAV_LINKS = [
   { href: "#projects", label: "Projects" },
   { href: "#blogs", label: "Blogs" },
 ];
+
+
+export const useScrollAnimation = () => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('grow-on-scroll');
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return ref;
+};
+
 export default function Home() {
   const pageRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -125,8 +149,9 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
+  const animRef = useScrollAnimation();
 
-
+<div ref={animRef}>Content grows when scrolled into view</div>
   const items = [
     {
       value: "notifications",
@@ -227,6 +252,10 @@ export default function Home() {
     }
   }, [menuOpen]);
 
+
+
+  
+
   return (
     <div ref={pageRef} className="relative">
       {/* ================= PRELOADER OVERLAY — uncommented ================= */}
@@ -240,10 +269,10 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex min-h-screen flex-col bg-[#faf9f6] font-sans text-[#1a1a1a]">
+      <div className="flex min-h-screen flex-col bg-[#EAEAEA] font-sans text-[#1a1a1a]">
         <section
           id="hero"
-          className="relative flex h-dvh flex-col items-center py-4 justify-between"
+          className="relative flex h-[110dvh] flex-col items-center py-25 justify-between"
         >
           {/* <video
             ref={videoRef}
@@ -305,11 +334,11 @@ export default function Home() {
 
             <div className=" md:hidden fade-in flex flex-col mx-8 text-center  md:flex-row gap-2 items-center  rounded-xl  font-['inter'] text-sm text-white">
               <div className="font-medium glassmorphism px-6 py-5 rounded-2xl">No inventory. No accounts to manage. Just your link, and your earnings.</div>
-              <Button className="bg-white text-black font-bold mr-2 ">Become a reseller</Button>
+              <Button className="bg-white text-black font-bold mr-2 hover:bg-black/40 hover:text-black/40">Become a reseller</Button>
             </div>
             <div className=" md:flex hidden fade-in  flex-col mx-6 text-center  md:flex-row gap-4 items-center pl-3 py-2 rounded-xl glassmorphism font-['inter'] text-sm text-white">
               <div className="font-medium">No inventory. No accounts to manage. Just your link, and your earnings.</div>
-              <Button size="lg" className="bg-white text-black font-bold mr-2">Become a reseller</Button>
+              <Button size="lg" className="bg-white text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">Become a reseller</Button>
             </div>
           </div>
         </section>
@@ -367,23 +396,23 @@ export default function Home() {
         </div>
 
         {/* ================= Sections tied to nav links ================= */}
-        <section id="about" className="relative bg-[#EAEAEA]">
+        <section id="about" className="relative bg-[#EAEAEA] -mt-15 rounded-t-[60px]">
           <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-20 rounded-t-[32px]  px-6 pt-40 py-16">
             <Reveal y={60} className="mt-2 max-w-[40%] max-h-[46px] bg-black/5 px-3 py-2 text-black/50 rounded-md">
-              ADHD-Friendly
+              Stream-Hub
             </Reveal>
 
             <Reveal y={60} delay={0.25} className="flex flex-col gap-8 font-['inter'] font-semibold text-[28px] md:text-[32px]">
               <div className="">
-                Here, you stop fighting your brain <br className="hidden md:flex" />
-                and start working with it
+                Want to stream for less?  <br className="hidden md:flex" />
+                or sell access to such platforms for less?
               </div>
               <div className="text-black/50">
-                We provide clear tools designed <br className="hidden md:flex" />
-                specifically for people with ADHD.
+                We give you a storefront to resell <br className="hidden md:flex" />
+                access to streaming platforms.
                 <br />
-                More <span><Highlight delay={0.2}>calm inside</Highlight>  — more <br /></span>
-                <Highlight delay={0.5}>impact outside</Highlight>
+                Cheaper <span><Highlight delay={0.2}>access</Highlight>  — more <br /></span>
+                <Highlight delay={0.5}>potential profits</Highlight>
               </div>
             </Reveal>
           </div>
@@ -394,7 +423,7 @@ export default function Home() {
               <StatBarGroup
                 stats={[
                   { label: "Anxiety", from: 80, to: 41 },
-                  { label: "Productivity", from: 41, to: 80 },
+                  { label: "Your margins", from: 41, to: 80 },
                 ]}
               />
             </div>
@@ -660,7 +689,49 @@ export default function Home() {
 
         </section>
 
-        <section id="blogs" className="flex min-h-[50dvh ] flex-col px-6 rounded-t-[20px]  bg-[#262626] mt-15 mx-6">
+<section 
+  id="blogs" 
+  ref={animRef} 
+  className="grow-on-scroll h-full flex min-h-[50dvh] flex-col px-6 py-6 text-white rounded-t-[20px] font-['inter'] gap-20 bg-[#262626] mt-15 mx-6 transition-transform origin-center will-change-transform"
+>
+          <div className="h-full grid grid-cols-2 gap-12 md:grid-cols-[2fr_1fr_1fr] ">
+            <div className="flex flex-col gap-12 col-span-2 md:col-span-1">
+              <div className="text-[18px]  font-semibold ">Fixa</div>
+              <div className="flex flex-col gap-3">
+                <div className="font-bold">Get early updates</div>
+                <div className="tex-white/50">Just the essentials from us — never spam, never noise.</div>
+                <Button className="bg-white w-fit text-black font-bold mr-2 hover:bg-black/40 hover:text-black/40">Become a reseller</Button>
+
+              </div>
+            </div>
+            <div className="flex flex-col gap-16">
+              <div className="flex flex-col gap-3">
+                <div className="font-medium text-white/50 ">Sections</div>
+                <div className="font-bold">Home</div>
+                <div className="font-bold">Features</div>
+                <div className="font-bold">Fixa AI</div>
+                <div className="font-bold">FAQ</div>
+              </div>
+
+               <div className="flex flex-col gap-3 text-end md:text-start">
+                <div className="font-medium text-white/50 text-start">Contacts</div>
+                <div className="font-bold">info@fixaplan.com</div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-12">
+              <div className="flex flex-col gap-3 text-end md:text-start">
+                <div className="font-medium text-white/50">Social</div>
+                <div className="font-bold">Instagram</div>
+                <div className="font-bold">LinkedIn</div>
+              </div>
+            </div>
+          </div>
+
+          <div className=" flex flex-col md:grid md:grid-cols-[2fr_1fr_1fr] gap-4 ">
+            <div className="order-3 text-white/50 md:order-1">©2026. Fixa. All Rights Reserved.</div>
+            <div className="text-bold order-2 font-bold ">Privacy Policy</div>
+            <div className="order-1 md:order-3"> Website by<span className="font-bold"> David Chuks:</span> Inspo from Fixa</div>
+          </div>
         </section>
 
 
