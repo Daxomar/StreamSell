@@ -168,7 +168,7 @@
 
 
 
-  
+
 
 //   return (
 //     <div ref={pageRef} className="relative">
@@ -833,7 +833,7 @@ export default function Home() {
 
 
 
-  
+
 
   return (
     <div ref={pageRef} className="relative">
@@ -913,11 +913,19 @@ export default function Home() {
 
             <div className=" md:hidden fade-in flex flex-col mx-8 text-center  md:flex-row gap-2 items-center  rounded-xl  font-['inter'] text-sm text-white">
               <div className="font-medium glassmorphism px-6 py-5 rounded-2xl">No inventory. No accounts to manage. Just your link, and your profit.</div>
-              <Button className="bg-white text-black font-bold mr-2 hover:bg-black/40 hover:text-black/40">Become a reseller</Button>
+                 <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
+                  <Link href="/auth/login">
+                    Become a reseller
+                  </Link>
+                </Button>
             </div>
             <div className=" md:flex hidden fade-in  flex-col mx-6 text-center  md:flex-row gap-4 items-center pl-3 py-2 rounded-xl glassmorphism font-['inter'] text-sm text-white">
               <div className="font-medium">No inventory. No accounts to manage. Just your link, and your profit.</div>
-              <Button size="lg" className="bg-white text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">Become a reseller</Button>
+                 <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
+                  <Link href="/auth/login">
+                    Become a reseller
+                  </Link>
+                </Button>
             </div>
           </div>
         </section>
@@ -1268,19 +1276,22 @@ export default function Home() {
 
         </section>
 
-<section 
-  id="footer" 
-  ref={animRef} 
-  className="grow-on-scroll h-full flex min-h-[50dvh] flex-col px-6 py-6 text-white rounded-t-[20px] font-['inter'] gap-20 bg-[#262626] mt-15 mx-6 transition-transform origin-center will-change-transform"
->
+        <section
+          id="footer"
+          ref={animRef}
+          className="grow-on-scroll h-full flex min-h-[50dvh] flex-col px-6 py-6 text-white rounded-t-[20px] font-['inter'] gap-20 bg-[#262626] mt-15 mx-6 transition-transform origin-center will-change-transform"
+        >
           <div className="h-full grid grid-cols-2 gap-12 md:grid-cols-[2fr_1fr_1fr] ">
             <div className="flex flex-col gap-12 col-span-2 md:col-span-1">
               <div className="text-[18px]  font-semibold ">StreamSell</div>
               <div className="flex flex-col gap-3">
                 <div className="font-bold">Get early updates</div>
                 <div className="tex-white/50">Just the essentials from us — never spam, never noise.</div>
-                <Button className="bg-white w-fit text-black font-bold mr-2 hover:bg-black/40 hover:text-black/40">Become a reseller</Button>
-
+                <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
+                  <Link href="/auth/login">
+                    Become a reseller
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="flex flex-col gap-16">
@@ -1292,7 +1303,7 @@ export default function Home() {
                 <div className="font-bold">FAQ</div>
               </div>
 
-               <div className="flex flex-col gap-3 text-end md:text-start">
+              <div className="flex flex-col gap-3 text-end md:text-start">
                 <div className="font-medium text-white/50 text-start">Contact</div>
                 <div className="font-bold">support@streamsell.com</div>
               </div>
