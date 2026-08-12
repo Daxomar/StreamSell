@@ -913,19 +913,19 @@ export default function Home() {
 
             <div className=" md:hidden fade-in flex flex-col mx-8 text-center  md:flex-row gap-2 items-center  rounded-xl  font-['inter'] text-sm text-white">
               <div className="font-medium glassmorphism px-6 py-5 rounded-2xl">No inventory. No accounts to manage. Just your link, and your profit.</div>
-                 <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
-                  <Link href="/auth/login">
-                    Become a reseller
-                  </Link>
-                </Button>
+              <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
+                <Link href="/auth/login">
+                  Become a reseller
+                </Link>
+              </Button>
             </div>
             <div className=" md:flex hidden fade-in  flex-col mx-6 text-center  md:flex-row gap-4 items-center pl-3 py-2 rounded-xl glassmorphism font-['inter'] text-sm text-white">
               <div className="font-medium">No inventory. No accounts to manage. Just your link, and your profit.</div>
-                 <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
-                  <Link href="/auth/login">
-                    Become a reseller
-                  </Link>
-                </Button>
+              <Button asChild className="bg-white w-fit text-black font-bold mr-2 hover:bg-[#262626] hover:text-white">
+                <Link href="/auth/login">
+                  Become a reseller
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -1319,7 +1319,12 @@ export default function Home() {
 
           <div className=" flex flex-col md:grid md:grid-cols-[2fr_1fr_1fr] gap-4 ">
             <div className="order-3 text-white/50 md:order-1">©2026. StreamSell. All Rights Reserved.</div>
-            <div className="text-bold order-2 font-bold ">Privacy Policy</div>
+            <Link
+              href="/privacy-policy"
+              className="text-bold order-2 font-bold hover:text-white/60 transition-colors"
+            >
+              Privacy Policy
+            </Link>
             <div className="order-1 md:order-3"> Website by<span className="font-bold"> David Chuks</span></div>
           </div>
         </section>
