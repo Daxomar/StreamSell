@@ -74,30 +74,12 @@ const getBaseRoute = () => {
           ],
         },
         {
-          title: "Vendors",
-          url: `${baseRoute}/vendors`,
-          icon: Store,
-          items: [
-            { title: "All Vendors", url: `${baseRoute}/vendors` },
-            { title: "Pending Approval", url: `${baseRoute}/vendors/pending` },
-          ],
-        },
-        {
           title: "Resellers",
           url: `${baseRoute}/resellers`,
           icon: Users,
           items: [
             { title: "All Resellers", url: `${baseRoute}/resellers` },
             { title: "Reseller Performance", url: `${baseRoute}/resellers/performance` },
-          ],
-        },
-        {
-          title: "Transactions",
-          url: `${baseRoute}/transactions`,
-          icon: FileText,
-          items: [
-            { title: "Transaction Log", url: `${baseRoute}/transactions/log` },
-            { title: "Failed Transactions", url: `${baseRoute}/transactions/failed` },
           ],
         },
         //Will Remove this for only vendors later
@@ -127,12 +109,12 @@ const getBaseRoute = () => {
       items: [
          {
           title: "Subscriptions",
-          url: `${baseRoute}/bundles`,
+          url: `${baseRoute}/subscriptions`,
           icon: Package,
           items: [
-            { title: "All Subscription", url: `${baseRoute}/bundles` },
-            { title: "Create Subscription", url: `${baseRoute}/bundles/new` },
-            { title: "Pricing", url: `${baseRoute}/bundles/pricing` },
+            { title: "All Subscription", url: `${baseRoute}/subscriptions` },
+            { title: "Create Subscription", url: `${baseRoute}/subscriptions/new` },
+            { title: "Pricing", url: `${baseRoute}/subscriptions/pricing` },
           ],
         },
         {
@@ -142,32 +124,6 @@ const getBaseRoute = () => {
           items: [
             { title: "Open Complaints", url: `${baseRoute}/complaints/open` },
             { title: "Resolved", url: `${baseRoute}/complaints/resolved` },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Store",
-      items: [
-        {
-          title: "Preview",
-          url: `${baseRoute}/store/store-front-preview`,
-          icon: Eye,
-          items: [
-            { title: "Live Preview", url: `${baseRoute}/store/store-front-preview` },
-            { title: "Mobile View", url: `${baseRoute}/store/store-front-preview?device=mobile` },
-          ],
-        },
-        {
-          title: "Store Settings",
-          url: `${baseRoute}/store/store-settings`,
-          icon: Store,
-          items: [
-            { title: "Branding", url: `${baseRoute}/store/store-settings/branding` },
-            { title: "Hero Slides", url: `${baseRoute}/store/store-settings/hero` },
-            { title: "Navigation", url: `${baseRoute}/store/store-settings/navigation` },
-            { title: "Contact & Social", url: `${baseRoute}/store/store-settings/contact` },
-            { title: "Trust & Footer", url: `${baseRoute}/store/store-settings/trust` },
           ],
         },
       ],

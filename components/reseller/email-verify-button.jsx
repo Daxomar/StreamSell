@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Mail } from "lucide-react";
 import { useUser } from "@/app/contexts/UserContext";
-import { fetchWithAuth } from "@/lib/utility/fetchWithAuth";
+// import { fetchWithAuth } from "@/lib/utility/fetchWithAuth";
 import toast from "react-hot-toast";
 
 export  function VerifyEmailButton() {

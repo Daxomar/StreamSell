@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Wallet, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
-import { fetchWithAuth } from "@/lib/utility/fetchWithAuth"
+// import { fetchWithAuth } from "@/lib/utility/fetchWithAuth"
 
 // Payout validation schema
 const payoutSchema = z.object({

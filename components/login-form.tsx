@@ -53,9 +53,13 @@ export function LoginForm() {
 
       // role comes back in the session
       const role = (result as any)?.user?.role?.toLowerCase()?.trim()
-      if (role === "admin") router.push("/admin")
-      if (role === "manager") router.push("/manager")
-      else router.push("/reseller")   // resellers/fulfillers → reseller dash
+      if (role === "admin") {
+        router.push("/admin")
+      } else if (role === "manager") {
+        router.push("/manager")
+      } else {
+        router.push("/reseller")
+      } // resellers/fulfillers → reseller dash
     } catch (error: any) {
       toast.error(error.message || "Failed to sign in")
     } finally {
