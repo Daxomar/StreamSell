@@ -18,6 +18,7 @@ import { useState } from "react"
 import { UserProvider, useUser } from "../contexts/UserContext"
 // import { fetchWithAuth } from "@/lib/utility/fetchWithAuth"
 import RoleGate from "../contexts/RoleGate"
+import ProfileCompletionGate from "../contexts/ProfileCompletionGate"
 import toast from "react-hot-toast"
 import DevModeBadge from "@/components/environmentbadge/devmodebadge"
 import { useRouter } from "next/navigation"
@@ -32,21 +33,21 @@ function ResellerLayoutContent({ children }) {
   const router = useRouter()
   const queryClient = useQueryClient()
   const handleLogout = async () => {
-  try {
-    await signOut()
-    queryClient.clear()               // wipe cached user data (no stale flash)
-    toast.success("Logged out")
-    router.push("/auth/login")        // explicit redirect (wins the race, no flicker)
-  } catch (err) {
-    console.error(err)
-    toast.error("Logout failed")
+    try {
+      await signOut()
+      queryClient.clear()               // wipe cached user data (no stale flash)
+      toast.success("Logged out")
+      router.push("/auth/login")        // explicit redirect (wins the race, no flicker)
+    } catch (err) {
+      console.error(err)
+      toast.error("Logout failed")
+    }
   }
-}
 
   const pathname = usePathname()
-  const { reseller, isLoadingReseller, isErrorReseller} = useUser()
+  const { reseller, isLoadingReseller, isErrorReseller } = useUser()
   console.log("Called By ResellerLayoutContent:", reseller)
-  
+
   const isActive = (path) => {
     if (path === "/reseller") {
       return pathname === "/reseller"
@@ -66,12 +67,12 @@ function ResellerLayoutContent({ children }) {
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          
+
           {/* Logo */}
           <Link href="/reseller" className="flex items-center gap-2 font-bold text-lg text-slate-900 hover:opacity-80 transition-opacity">
-            
-              <img src="/logo.jpg" alt="Logo" className="w-12 h-12 " />
-            
+
+            <img src="/logo.jpg" alt="Logo" className="w-12 h-12 " />
+
             <div>
               <span className="block">JoyBundle</span>
               <span className="text-xs text-slate-500 font-normal">Reseller</span>
@@ -80,19 +81,19 @@ function ResellerLayoutContent({ children }) {
           <div className="flex items-center gap-4 flex-1 justify-end">
             <div className=" ">
               <DevModeBadge />
-              </div>
-            
+            </div>
+
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
-                <Link 
+                <Link
                   key={link.href}
-                  href={link.href} 
+                  href={link.href}
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    isActive(link.href) 
-                      ? "bg-blue-50 text-blue-600" 
+                    isActive(link.href)
+                      ? "bg-blue-50 text-blue-600"
                       : "text-slate-600 hover:bg-slate-100"
                   )}
                 >
@@ -102,8 +103,8 @@ function ResellerLayoutContent({ children }) {
             </nav>
 
             <div className="h-8 w-px bg-slate-200 hidden md:block" />
-             
-            
+
+
             {/* User Profile Section */}
             <div className="flex items-center gap-3">
               {isLoadingReseller ? (
@@ -119,11 +120,11 @@ function ResellerLayoutContent({ children }) {
                   </div>
                 </>
               )}
-              
+
               {/* Desktop Logout */}
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleLogout}
                 className="text-slate-500 hover:text-red-600 hover:bg-red-50 hidden md:flex transition-colors"
               >
@@ -157,12 +158,12 @@ function ResellerLayoutContent({ children }) {
                       <nav className="flex-1 px-4 py-6 space-y-2">
                         {navLinks.map((link) => (
                           <SheetClose asChild key={link.href}>
-                            <Link 
+                            <Link
                               href={link.href}
                               className={cn(
                                 "block px-4 py-3 rounded-lg font-medium transition-all",
-                                isActive(link.href) 
-                                  ? "bg-blue-50 text-cyan-500 border-l-4 border-cyan-500 hover:text-white hover:bg-cyan-600" 
+                                isActive(link.href)
+                                  ? "bg-blue-50 text-cyan-500 border-l-4 border-cyan-500 hover:text-white hover:bg-cyan-600"
                                   : "text-slate-700 hover:bg-slate-100"
                               )}
                             >
@@ -208,12 +209,12 @@ export default function ResellerLayout({ children }) {
   console.log("ResellerLayout rendered")
 
   return (
-      <UserProvider>
-        <RoleGate allowedRoles={["user","admin"]}>
-        <ResellerLayoutContent>
-          {children}
-        </ResellerLayoutContent>
-        </RoleGate>
-        </UserProvider>      
+    <UserProvider>
+      <RoleGate allowedRoles={["user"]}>
+        <ProfileCompletionGate>
+          <ResellerLayoutContent>{children}</ResellerLayoutContent>
+        </ProfileCompletionGate>
+      </RoleGate>
+    </UserProvider>
   )
 }
