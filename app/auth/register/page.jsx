@@ -83,6 +83,11 @@ export default function VendorRegisterPage() {
     }
   }
 
+
+  const handleGoogle = () => {
+    signIn.social({ provider: "google", callbackURL: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/callback` })
+  }
+
   if (isSuccess) {
     return (
       <div className="grid min-h-svh lg:grid-cols-2">
@@ -141,7 +146,7 @@ export default function VendorRegisterPage() {
             <ArrowLeft size={20} />
             <span>Back</span>
           </Link>
-          <Link href="/vendor-auth/login" className="text-sm font-medium hover:underline">
+          <Link href="/auth/login" className="text-sm font-medium hover:underline">
             Have an account?
           </Link>
         </div>
@@ -247,7 +252,7 @@ export default function VendorRegisterPage() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full rounded-full bg-[#05563E] hover:bg-[#03563E] p-5 text-white font-semibold transition-colors"
+                    className="w-full rounded-full bg-[#262626] hover:bg-[#5d5d5d] p-5 text-white font-semibold transition-colors"
                   >
                     {isLoading ? (
                       <>
@@ -263,6 +268,34 @@ export default function VendorRegisterPage() {
                 {/* Divider */}
                 <hr className="border border-[#EEEEEE]" />
 
+                {/* Social login */}
+                <Field>
+                  <Button type="submit" onClick={handleGoogle} className="flex items-center justify-center border border-[#EEEEEE] p-5 font-semibold hover:bg-[#EEEEEE]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 533.5 544.3"
+                      className="h-4 w-4 mr-2"
+                    >
+                      <path
+                        d="M533.5 278.4c0-17.7-1.5-35.3-4.7-52.4H272v99.3h146.9c-6.3 33.7-25.1 62.4-53.6 81.7v68.1h86.7c50.6-46.6 79.5-115.3 79.5-196.7z"
+                        fill="#4285F4"
+                      />
+                      <path
+                        d="M272 544.3c72.6 0 133.6-24.1 178.1-65.5l-86.7-68.1c-24.1 16.1-55 25.5-91.4 25.5-70.3 0-129.8-47.4-151.2-111.1H33.8v69.9C77.7 482.5 169.5 544.3 272 544.3z"
+                        fill="#34A853"
+                      />
+                      <path
+                        d="M120.8 326.1c-5.7-16.9-9-34.9-9-53.1s3.3-36.2 9-53.1v-69.9H33.8C12.1 180.1 0 219.7 0 272s12.1 91.9 33.8 136.9l87-69.8z"
+                        fill="#FBBC05"
+                      />
+                      <path
+                        d="M272 107.7c39.5 0 74.8 13.6 102.7 40.3l77.1-77.1C405.6 24.7 344.6 0 272 0 169.5 0 77.7 61.8 33.8 153.3l87 69.9c21.4-63.7 80.9-111.1 151.2-111.1z"
+                        fill="#EA4335"
+                      />
+                    </svg>
+                    Sign up with Google
+                  </Button>
+                </Field>
                 {/* Login Link */}
                 <Field>
                   <p className="text-center text-sm text-gray-600">
@@ -281,26 +314,26 @@ export default function VendorRegisterPage() {
       {/* Right side - Background Image */}
       <div
         className="relative w-full h-96 lg:h-full hidden lg:flex  items-end bg-cover bg-center "
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1556741533-927182355585?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
+        style={{ backgroundImage: `url('https://i.pinimg.com/1200x/7d/02/38/7d0238338466de36c96038991c644409.jpg?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
       >
         {/* Brand color overlay */}
-        <div className="absolute inset-0 bg-[#05563E]/50" />
+        <div className="absolute inset-0 bg-[#262626]/60" />
 
         {/* Content on top */}
         <div className="relative z-10 text-white text-start p-14 mx-auto  w-full flex gap-4">
           <div className=" bg-white border-6 border-white rounded-full">
-            <div className=" h-full  border-6 border-[#05563E] rounded-full">
+            <div className=" h-full  border-6 border-[#262626] rounded-full">
               <div className=" h-full  border-6 border-black rounded-full">
                 <div className="  h-full border-6 border-white rounded-full">
-                  <div className="  h-full  border-6 border-[#05563E] rounded-full"></div>
+                  <div className="  h-full  border-6 border-[#262626] rounded-full"></div>
 
                 </div>
               </div>
             </div>
           </div>
           <div className="">
-            <h1 className="text-3xl font-bold">Grow Your Business</h1>
-            <p className="mt-2 text-lg">Start your journey as a vendor and build your reseller network today</p>
+            <h1 className="text-3xl font-bold">Create An Account</h1>
+            <p className="mt-2 text-lg">Sign up to access your dashboard and start managing your subscriptions!</p>
           </div>
 
         </div>
