@@ -329,7 +329,7 @@ export default function AdminDashboard() {
     },
     {
       title: "Active Orders",
-      value: analytics?.activeOrders || 0,
+      value: analytics?.pendingOrders || 0,
       icon: ShoppingCart,
       isCurrency: false,
       subtitle: "Boomm"

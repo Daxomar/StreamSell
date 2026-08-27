@@ -88,9 +88,8 @@ const getBaseRoute = () => {
           url: `${baseRoute}/confirm-payment`,
           icon: Wallet,
           items: [
-            { title: "Request Payout", url: `${baseRoute}/confirm-payment/pending` },
-            { title: "Payout History", url: `${baseRoute}/confirm-payment/history` },
-            { title: "Bank Details", url: `${baseRoute}/confirm-payment/bank` },
+            { title: "Reseller Payouts", url: `${baseRoute}/confirm-payment/reseller-payout` },
+            { title: "Supplier Payout", url: `${baseRoute}/confirm-payment/supplier-payout` },
           ],
         },
         {
@@ -368,6 +367,19 @@ const getBaseRoute = () => {
           items: [
             { title: "Dashboard", url: `${baseRoute}` },
             { title: "Quick Stats", url: `${baseRoute}/stats` },
+          ],
+        },
+      ],
+    },
+        {
+      title: "My Payouts & Earnings",
+      items: [
+        {
+          title: "P & E",
+          url: `${baseRoute}`,
+          icon: LayoutDashboard,
+          items: [
+            { title: "Payout & Earnings", url: `${baseRoute}/payouts` },
           ],
         },
       ],

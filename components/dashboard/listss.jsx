@@ -502,6 +502,38 @@ const LIST_CONFIGS = {
         showActions: false,
     },
 
+    supplierPayout: {
+        gridCols: "md:grid-cols-6",
+        icon: () => <i className="fa-solid fa-hand-holding-dollar h-5 w-5" />,
+        title: (row) => row.managerName || "Manager",
+        subtitle: (row) => row.managerPhone || "No number",
+        columns: [
+            { label: "Reference", render: (row) => <span className="font-mono text-xs">{row.reference?.slice(-10)}</span> },
+            { label: "Subscription", render: (row) => row.subscriptionName || "—" },
+            { label: "Amount", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.amount || 0)}</span> },
+            { label: "Date", render: (row) => formatDate(row.createdAt) },
+            { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
+        ],
+        getHref: null,
+        showActions: true,
+    },
+
+    resellerPayout: {
+        gridCols: "md:grid-cols-6",
+        icon: () => <i className="fa-solid fa-money-bill-transfer h-5 w-5" />,
+        title: (row) => row.reseller?.name || "Unknown",
+        subtitle: (row) => row.phoneNumber || "No number",
+        columns: [
+            { label: "Payout ID", render: (row) => <span className="font-mono text-xs">{row._id?.slice(-8)}</span> },
+            { label: "Network", render: (row) => row.network || "N/A" },
+            { label: "Net Amount", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.netAmount || 0)}</span> },
+            { label: "Date", render: (row) => formatDate(row.requestedAt || row.createdAt) },
+            { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
+        ],
+        getHref: null,
+        showActions: true,
+    },
+
     product: {
         gridCols: "md:grid-cols-4",
         icon: () => <ShoppingBag className="h-5 w-5" />,
@@ -518,6 +550,193 @@ const LIST_CONFIGS = {
 
 // ── List ─────────────────────────────────────────────────────
 
+// export function List({
+//     items = [],
+//     type = "reseller",
+//     isLoading = false,
+//     isError = false,
+//     error = null,
+//     role = "",
+//     onFulfill = null,
+//     onClaim = null,
+//     claiming = false,
+//     onPay = null,        // ← add
+//     paying = false,
+// }) {
+//     const router = useRouter()
+//     const config = LIST_CONFIGS[type] ?? LIST_CONFIGS.reseller
+
+//     if (isLoading) {
+//         return (
+//             <div className="flex flex-col items-center justify-center py-12 gap-2">
+//                 <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+//                 <p className="text-slate-500">Loading...</p>
+//             </div>
+//         )
+//     }
+
+//     if (isError) {
+//         return (
+//             <div className="flex flex-col items-center justify-center py-12 gap-2">
+//                 <X className="h-8 w-8 text-red-500" />
+//                 <p className="text-red-600 font-medium">Failed to load</p>
+//                 <p className="text-sm text-slate-500">{error?.message}</p>
+//             </div>
+//         )
+//     }
+
+//     if (items.length === 0) {
+//         return (
+//             <div className="flex flex-col items-center justify-center py-12">
+//                 <p className="text-slate-500">Nothing here yet.</p>
+//             </div>
+//         )
+//     }
+
+//     const handleClick = (row) => {
+//         if (!config.getHref) return
+//         router.push(config.getHref(row, role))
+//     }
+
+//     // renders the right action button for an order row (claim/fulfill)
+//     const renderOrderAction = (row, fullWidth = false) => {
+//         const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
+//         if (onClaim && row.deliveryStatus === "pending") {
+//             return (
+//                 <Button
+//                     size="sm"
+//                     disabled={claiming}
+//                     className={base}
+//                     onClick={(e) => { e.stopPropagation(); onClaim(row); }}
+//                 >
+//                     <i className="fa-solid fa-hand mr-1" />
+//                     {claiming ? "Claiming..." : "Claim"}
+//                 </Button>
+//             )
+//         }
+//         if (onFulfill && row.deliveryStatus === "processing") {
+//             return (
+//                 <Button
+//                     size="sm"
+//                     className={base}
+//                     onClick={(e) => { e.stopPropagation(); onFulfill(row); }}
+//                 >
+//                     <i className="fa-solid fa-paper-plane mr-1" /> Fulfill
+//                 </Button>
+//             )
+//         }
+//         return null
+//     }
+
+//     return (
+//         <div>
+//             {/* ── Desktop ── */}
+//             <div className="space-y-3 hidden md:block">
+//                 {items.map((row) => (
+//                     <Item
+//                         key={row._id}
+//                         className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid grid-cols-1 ${config.gridCols} ${config.getHref ? "cursor-pointer" : ""}`}
+//                         onClick={() => handleClick(row)}
+//                     >
+//                         <div className="w-full flex items-center p-2 gap-2">
+//                             <ItemMedia>
+//                                 <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
+//                                     {config.icon(row)}
+//                                 </div>
+//                             </ItemMedia>
+//                             <ItemContent>
+//                                 <ItemTitle className="text-sm font-semibold">{config.title(row)}</ItemTitle>
+//                                 {config.subtitle(row) && (
+//                                     <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
+//                                 )}
+//                             </ItemContent>
+//                         </div>
+
+//                         {config.columns.map((col) => (
+//                             <div key={col.label} className="w-full">
+//                                 <ItemContent>
+//                                     <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
+//                                     <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
+//                                 </ItemContent>
+//                             </div>
+//                         ))}
+
+//                         {config.showActions && (
+//                             <ItemActions>
+//                                 {type === "order" ? (
+//                                     renderOrderAction(row)
+//                                 ) : (
+//                                     <DropdownMenuAction />
+//                                 )}
+//                             </ItemActions>
+//                         )}
+//                     </Item>
+//                 ))}
+//             </div>
+
+//             {/* ── Mobile ── */}
+//             <div className="space-y-3 block md:hidden">
+//                 {items.map((row) => (
+//                     <Item
+//                         key={row._id}
+//                         className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid ${config.getHref ? "cursor-pointer" : ""}`}
+//                         onClick={() => handleClick(row)}
+//                     >
+//                         <div className="w-full flex items-start justify-between">
+//                             <div className="w-full flex items-center p-2 gap-2">
+//                                 <ItemMedia>
+//                                     <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
+//                                         {config.icon(row)}
+//                                     </div>
+//                                 </ItemMedia>
+//                                 <ItemContent className="w-full flex flex-col gap-1">
+//                                     <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">
+//                                         <span>{config.title(row)}</span>
+//                                         <StatusBadge status={type === "order" ? row.deliveryStatus : row.status} />
+//                                     </ItemTitle>
+//                                     {config.subtitle(row) && (
+//                                         <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
+//                                     )}
+//                                 </ItemContent>
+//                             </div>
+//                             {config.showActions && type !== "order" && (
+//                                 <ItemActions>
+//                                     <DropdownMenuAction />
+//                                 </ItemActions>
+//                             )}
+//                         </div>
+
+//                         <div className="w-full flex items-center justify-between gap-2 px-2 pb-2">
+//                             {config.columns
+//                                 .filter((col) => col.label !== "Status")
+//                                 .slice(0, 2)
+//                                 .map((col) => (
+//                                     <ItemContent key={col.label}>
+//                                         <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
+//                                         <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
+//                                     </ItemContent>
+//                                 ))}
+//                         </div>
+
+//                         {/* Mobile action button for orders */}
+//                         {type === "order" && (
+//                             <div className="w-full px-2 pb-2">
+//                                 {renderOrderAction(row, true)}
+//                             </div>
+//                         )}
+
+//                         <div className="w-full px-2 pb-2">
+//                             <ItemDescription className="text-xs text-gray-500">
+//                                 Created {formatDate(row.createdAt)}
+//                             </ItemDescription>
+//                         </div>
+//                     </Item>
+//                 ))}
+//             </div>
+//         </div>
+//     )
+// }
+
 export function List({
     items = [],
     type = "reseller",
@@ -528,6 +747,11 @@ export function List({
     onFulfill = null,
     onClaim = null,
     claiming = false,
+    onPay = null,
+    paying = false,
+    onView = null,
+    onConfirm = null,
+    onReject = null,
 }) {
     const router = useRouter()
     const config = LIST_CONFIGS[type] ?? LIST_CONFIGS.reseller
@@ -564,7 +788,7 @@ export function List({
         router.push(config.getHref(row, role))
     }
 
-    // renders the right action button for an order row (claim/fulfill)
+    // ORDER row → claim (pending) / fulfill (processing)
     const renderOrderAction = (row, fullWidth = false) => {
         const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
         if (onClaim && row.deliveryStatus === "pending") {
@@ -593,6 +817,68 @@ export function List({
         }
         return null
     }
+
+    // SUPPLIER PAYOUT row → pay (pending) / processing / paid
+  const renderSupplierAction = (row, fullWidth = false) => {
+    const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
+    if ((row.status === "pending" || row.status === "failed") && onPay) {
+        return (
+            <Button
+                size="sm"
+                disabled={paying}
+                className={base}
+                onClick={(e) => { e.stopPropagation(); onPay(row); }}
+            >
+                <i className="fa-solid fa-hand-holding-dollar mr-1" />
+                {paying ? "..." : (row.status === "failed" ? "Retry" : "Pay")}
+            </Button>
+        )
+    }
+    if (row.status === "processing") {
+        return <span className="text-xs text-blue-600 font-medium">Processing...</span>
+    }
+    if (row.status === "paid") {
+        return <span className="text-xs text-green-600 font-medium">Paid</span>
+    }
+    if (row.status === "failed") {
+        return null  // handled above (Retry button), but safe fallback
+    }
+    return null
+}
+
+    // RESELLER PAYOUT row → view + (confirm/reject on pending)
+    const renderResellerPayoutAction = (row) => {
+        return (
+            <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                {onView && (
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onView(row)} title="View">
+                        <i className="fa-solid fa-eye" />
+                    </Button>
+                )}
+                {row.status === "pending" && onConfirm && (
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:bg-green-50" onClick={() => onConfirm(row)} title="Confirm">
+                        <i className="fa-solid fa-circle-check" />
+                    </Button>
+                )}
+                {row.status === "pending" && onReject && (
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:bg-red-50" onClick={() => onReject(row)} title="Reject">
+                        <i className="fa-solid fa-circle-xmark" />
+                    </Button>
+                )}
+            </div>
+        )
+    }
+
+    // dispatch by type
+    const renderAction = (row, fullWidth = false) => {
+        if (type === "order") return renderOrderAction(row, fullWidth)
+        if (type === "supplierPayout") return renderSupplierAction(row, fullWidth)
+        if (type === "resellerPayout") return renderResellerPayoutAction(row)
+        return null
+    }
+
+    const usesCustomAction =
+        type === "order" || type === "supplierPayout" || type === "resellerPayout"
 
     return (
         <div>
@@ -629,8 +915,8 @@ export function List({
 
                         {config.showActions && (
                             <ItemActions>
-                                {type === "order" ? (
-                                    renderOrderAction(row)
+                                {usesCustomAction ? (
+                                    renderAction(row)
                                 ) : (
                                     <DropdownMenuAction />
                                 )}
@@ -665,7 +951,7 @@ export function List({
                                     )}
                                 </ItemContent>
                             </div>
-                            {config.showActions && type !== "order" && (
+                            {config.showActions && !usesCustomAction && (
                                 <ItemActions>
                                     <DropdownMenuAction />
                                 </ItemActions>
@@ -684,10 +970,10 @@ export function List({
                                 ))}
                         </div>
 
-                        {/* Mobile action button for orders */}
-                        {type === "order" && (
-                            <div className="w-full px-2 pb-2">
-                                {renderOrderAction(row, true)}
+                        {/* Mobile custom action (order / supplierPayout / resellerPayout) */}
+                        {usesCustomAction && (
+                            <div className="w-full px-2 pb-2 flex justify-end">
+                                {renderAction(row, true)}
                             </div>
                         )}
 

@@ -168,9 +168,9 @@ export default function ManagerLayout({ children }) {
   
       <UserProvider>
         <RoleGate allowedRoles={["admin", "manager"]}>
-          <TransactionProvider>
+          
             <ManagerLayoutContent>{children}</ManagerLayoutContent>
-          </TransactionProvider>
+          
         </RoleGate>
       </UserProvider>
  

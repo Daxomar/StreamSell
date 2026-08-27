@@ -6,21 +6,17 @@ import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Field,
-  FieldGroup,
-} from "@/components/ui/field"
-import { Loader2, CheckCircle, ArrowLeft, CheckCheck } from "lucide-react"
-import toast from 'react-hot-toast'
+import { Field, FieldGroup } from "@/components/ui/field"
+import { Loader2, CheckCircle,CheckCheck, ArrowLeft} from "lucide-react"
+import toast from "react-hot-toast"
 import Link from "next/link"
+import { signUp, signIn } from "../../../lib/auth-client"   // ← import from your authClient
 
 const registerSchema = z
   .object({
     businessName: z.string().min(2, "Business name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
-    phoneNumber: z
-      .string()
-      .regex(/^0[2-9]\d{8}$/, "Enter a valid phone number (e.g. 0241234567)"),
+    phoneNumber: z.string().regex(/^0[2-9]\d{8}$/, "Enter a valid phone number (e.g. 0241234567)"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
   })
@@ -44,51 +40,43 @@ export default function VendorRegisterPage() {
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/vendor/sign-up`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          businessName: data.businessName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          password: data.password,
-        }),
+      const { data: result, error } = await signUp.email({
+        email: data.email,
+        password: data.password,
+        name: data.businessName,          // BetterAuth's `name` = business name
+        phoneNumber: data.phoneNumber,    // additional field (must be configured in auth)
       })
 
-      const result = await response.json()
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Failed to sign up")
+      if (error) {
+        throw new Error(error.message || "Failed to sign up")
       }
 
-      if (result?.user) {
-        toast.success("Registration successful!")
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        setIsSuccess(true)
-      } else {
-        throw new Error("No user data returned from server")
-      }
-
+      toast.success("Registration successful!")
+      setIsSuccess(true)
+      // optional: route them in after a moment
+      await new Promise((r) => setTimeout(r, 800))
+      // router.push("/reseller")
     } catch (error) {
       console.error("Registration error:", error)
-      toast.error(error.message || "Failed to register as vendor.")
+      toast.error(error.message || "Failed to register.")
     } finally {
       setIsLoading(false)
     }
   }
 
-
-  const handleGoogle = () => {
-    signIn.social({ provider: "google", callbackURL: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/callback` })
+  const handleGoogle = async () => {
+    try {
+      await signIn.social({
+        provider: "google",
+        callbackURL: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/callback`,
+      })
+    } catch (error) {
+      toast.error("Google sign-up failed")
+    }
   }
 
-  if (isSuccess) {
+    if (isSuccess) {
     return (
       <div className="grid min-h-svh lg:grid-cols-2">
         {/* Left side - Content */}
@@ -101,20 +89,20 @@ export default function VendorRegisterPage() {
           <div className="flex flex-1 items-center justify-center">
             <div className="w-full max-w-xs text-center space-y-6">
               <div className="flex justify-center">
-                <div className="w-16 h-16 bg-[#05563E] rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-[#262626] rounded-full flex items-center justify-center">
                   <CheckCheck className="w-8 h-8 text-white" />
                 </div>
               </div>
 
               <div className="space-y-3">
-                <h2 className="text-2xl font-bold text-slate-900">Registration Submitted</h2>
+                <h2 className="text-2xl font-bold text-slate-900">Check Your Email</h2>
                 <p className="text-slate-500 text-sm leading-relaxed">
-                  Your application has been sent for approval. You will receive an email once an admin reviews your account.
+                  We've sent a verification link to your email. Please verify your account, then log in to continue.
                 </p>
               </div>
 
-              <Link href="/vendor-auth/login">
-                <Button className="w-full rounded-full bg-[#05563E] hover:bg-[#03563E] p-5 text-white font-semibold transition-colors">
+              <Link href="/auth/login">
+                <Button className="w-full rounded-full bg-[#262626] hover:bg-[#3a3a3a] p-5 text-white font-semibold transition-colors">
                   Back to Login
                 </Button>
               </Link>
@@ -125,12 +113,12 @@ export default function VendorRegisterPage() {
         {/* Right side - Background */}
         <div
           className="relative w-full h-96 lg:h-full hidden lg:flex items-end bg-cover bg-center"
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1556741533-927182355585?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
+          style={{ backgroundImage: `url('https://i.pinimg.com/1200x/7d/02/38/7d0238338466de36c96038991c644409.jpg?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
         >
-          <div className="absolute inset-0 bg-[#05563E]/50" />
+          <div className="absolute inset-0 bg-[#262626]/70" />
           <div className="relative z-10 text-white text-start p-14 w-full">
-            <h1 className="text-3xl font-bold">Welcome</h1>
-            <p className="mt-2 text-lg">Your application is being reviewed by our team. We'll notify you soon!</p>
+            <h1 className="text-3xl font-bold">Almost There</h1>
+            <p className="mt-2 text-lg">Check your inbox to verify your email and activate your account.</p>
           </div>
         </div>
       </div>

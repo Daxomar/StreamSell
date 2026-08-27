@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import toast from "react-hot-toast"
+import { api } from "../../lib/api"
 
 export function SendMessageDialog({ open, onOpenChange, reseller }) {
   const [message, setMessage] = useState("")
@@ -14,19 +15,24 @@ export function SendMessageDialog({ open, onOpenChange, reseller }) {
   const segments = len === 0 ? 0 : len <= 160 ? 1 : Math.ceil(len / 153)
 
   // TODO: swap this stub for the real backend SMS endpoint later
-  const sendMessage = async () => {
+const sendMessage = async () => {
     setSending(true)
     try {
-      // await api("/api/v1/messages/send", {
-      //   method: "POST",
-      //   body: JSON.stringify({ phone: reseller.phoneNumber, message }),
-      // })
-      await new Promise((r) => setTimeout(r, 600)) // simulate
-      toast.success(`(stub) Would send to ${reseller.phoneNumber}`)
+      const response = await api("/api/v1/users/messages/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: reseller.phoneNumber, message }),
+      })
+
+      // Assuming your api helper parses JSON automatically; 
+      // adjust if you need an explicit await response.json()
+      toast.success(`Message sent successfully to ${reseller.phoneNumber}`)
       setMessage("")
       onOpenChange(false)
     } catch (e) {
-      toast.error("Failed to send message")
+      toast.error(e?.message || "Failed to send message")
     } finally {
       setSending(false)
     }
