@@ -487,23 +487,23 @@ const LIST_CONFIGS = {
     },
 
     // Fulfiller's own payout records (Level 2 — their money)
-   fulfillerPayout: {
-    gridCols: "md:grid-cols-6",
-    icon: () => <Wallet className="h-5 w-5" />,
-    title: (row) => row.subscriptionName || row.reference?.slice(-10) || "Payout",
-    subtitle: (row) => row.reference,
-    columns: [
-        { label: "Date", render: (row) => formatDate(row.createdAt) },
-        { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
-        { label: "Earned", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.amount || 0)}</span> },
-        { label: "Fee", render: (row) => <span className="text-slate-500">−₵{formatCurrency(row.transferFee || 0)}</span> },
-        { label: "Received", render: (row) => <span className="text-green-600 font-semibold">₵{formatCurrency(row.netAmount ?? row.amount ?? 0)}</span> },
-        { label: "Paid", render: (row) => (row.paidAt ? formatDate(row.paidAt) : "—") },
-    ],
+    fulfillerPayout: {
+        gridCols: "md:grid-cols-6",
+        icon: () => <Wallet className="h-5 w-5" />,
+        title: (row) => row.subscriptionName || row.reference?.slice(-10) || "Payout",
+        subtitle: (row) => row.reference,
+        columns: [
+            { label: "Date", render: (row) => formatDate(row.createdAt) },
+            { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
+            { label: "Earned", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.amount || 0)}</span> },
+            { label: "Fee", render: (row) => <span className="text-slate-500">−₵{formatCurrency(row.transferFee || 0)}</span> },
+            { label: "Received", render: (row) => <span className="text-green-600 font-semibold">₵{formatCurrency(row.netAmount ?? row.amount ?? 0)}</span> },
+            { label: "Paid", render: (row) => (row.paidAt ? formatDate(row.paidAt) : "—") },
+        ],
 
-    getHref: null,
-    showActions: false,
-},
+        getHref: null,
+        showActions: false,
+    },
 
     supplierPayout: {
         gridCols: "md:grid-cols-6",
@@ -753,6 +753,8 @@ export function List({
     onPay = null,
     paying = false,
     onView = null,
+    onEdit, 
+    onEditing,
     onConfirm = null,
     onReject = null,
 }) {
@@ -791,63 +793,63 @@ export function List({
         router.push(config.getHref(row, role))
     }
 
-    // ORDER row → claim (pending) / fulfill (processing)
-    const renderOrderAction = (row, fullWidth = false) => {
-        const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
-        if (onClaim && row.deliveryStatus === "pending") {
-            return (
-                <Button
-                    size="sm"
-                    disabled={claiming}
-                    className={base}
-                    onClick={(e) => { e.stopPropagation(); onClaim(row); }}
-                >
-                    <i className="fa-solid fa-hand mr-1" />
-                    {claiming ? "Claiming..." : "Claim"}
-                </Button>
-            )
-        }
-        if (onFulfill && row.deliveryStatus === "processing") {
-            return (
-                <Button
-                    size="sm"
-                    className={base}
-                    onClick={(e) => { e.stopPropagation(); onFulfill(row); }}
-                >
-                    <i className="fa-solid fa-paper-plane mr-1" /> Fulfill
-                </Button>
-            )
-        }
-        return null
-    }
+ const renderOrderAction = (row, fullWidth = false) => {
+  const base = `${fullWidth ? "w-full" : ""}`
+
+  if (row.deliveryStatus === "pending" && onClaim) {
+    return (
+      <Button size="sm" disabled={claiming} className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
+        onClick={(e) => { e.stopPropagation(); onClaim(row); }}>
+        {claiming ? "..." : "Claim"}
+      </Button>
+    )
+  }
+  if (row.deliveryStatus === "processing" && onFulfill) {
+    return (
+      <Button size="sm" className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
+        onClick={(e) => { e.stopPropagation(); onFulfill(row); }}>
+        Fulfill
+      </Button>
+    )
+  }
+  if (row.deliveryStatus === "delivered" && onEdit) {
+    return (
+      <Button size="sm" variant="outline" className="border-[#262626] text-[#262626] hover:bg-slate-100"
+        onClick={(e) => { e.stopPropagation(); onEdit(row); }}>
+        <i className="fa-solid fa-pen mr-1" /> Edit
+      </Button>
+    )
+  }
+  return null
+}
 
     // SUPPLIER PAYOUT row → pay (pending) / processing / paid
-  const renderSupplierAction = (row, fullWidth = false) => {
-    const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
-    if ((row.status === "pending" || row.status === "failed") && onPay) {
-        return (
-            <Button
-                size="sm"
-                disabled={paying}
-                className={base}
-                onClick={(e) => { e.stopPropagation(); onPay(row); }}
-            >
-                <i className="fa-solid fa-hand-holding-dollar mr-1" />
-                {paying ? "..." : (row.status === "failed" ? "Retry" : "Pay")}
-            </Button>
-        )
+    const renderSupplierAction = (row, fullWidth = false) => {
+        const base = `bg-[#262626] hover:bg-[#3a3a3a] text-white disabled:opacity-50 ${fullWidth ? "w-full" : ""}`
+        if ((row.status === "pending" || row.status === "failed") && onPay) {
+            return (
+                <Button
+                    size="sm"
+                    disabled={paying}
+                    className={base}
+                    onClick={(e) => { e.stopPropagation(); onPay(row); }}
+                >
+                    <i className="fa-solid fa-hand-holding-dollar mr-1" />
+                    {paying ? "..." : (row.status === "failed" ? "Retry" : "Pay")}
+                </Button>
+            )
+        }
+        // if (row.status === "processing") {
+        //     return <span className="text-xs text-blue-600 font-medium">Processing...</span>
+        // }
+        // if (row.status === "paid") {
+        //     return <span className="text-xs text-green-600 font-medium">Paid</span>
+        // }
+        // if (row.status === "failed") {
+        //     return null  // handled above (Retry button), but safe fallback
+        // }
+        return null
     }
-    // if (row.status === "processing") {
-    //     return <span className="text-xs text-blue-600 font-medium">Processing...</span>
-    // }
-    // if (row.status === "paid") {
-    //     return <span className="text-xs text-green-600 font-medium">Paid</span>
-    // }
-    // if (row.status === "failed") {
-    //     return null  // handled above (Retry button), but safe fallback
-    // }
-    return null
-}
 
     // RESELLER PAYOUT row → view + (confirm/reject on pending)
     const renderResellerPayoutAction = (row) => {
@@ -929,65 +931,67 @@ export function List({
                 ))}
             </div>
 
-  {/* ── Mobile ── */}
-<div className="space-y-3 block md:hidden">
-    {items.map((row) => (
-        <Item
-            key={row._id}
-            className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid ${config.getHref ? "cursor-pointer" : ""}`}
-            onClick={() => handleClick(row)}
-        >
-            <div className="w-full flex items-start justify-between">
-                <div className="w-full flex items-center p-2 gap-2">
-                    <ItemMedia>
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
-                            {config.icon(row)}
+            {/* ── Mobile ── */}
+            <div className="space-y-3 block md:hidden">
+                {items.map((row) => (
+                    <Item
+                        key={row._id}
+                        className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid ${config.getHref ? "cursor-pointer" : ""}`}
+                        onClick={() => handleClick(row)}
+                    >
+                        <div className="w-full flex items-start justify-between">
+                            <div className="w-full flex items-center p-2 gap-2">
+                                <ItemMedia>
+                                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
+                                        {config.icon(row)}
+                                    </div>
+                                </ItemMedia>
+                                <ItemContent className="w-full flex flex-col gap-1">
+                                    <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">
+                                        <span>{config.title(row)}</span>
+                                        <StatusBadge status={type === "order" ? row.deliveryStatus : row.status} />
+                                    </ItemTitle>
+                                    {config.subtitle(row) && (
+                                        <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
+                                    )}
+                                </ItemContent>
+                            </div>
+                            {config.showActions && !usesCustomAction && (
+                                <ItemActions>
+                                    <DropdownMenuAction />
+                                </ItemActions>
+                            )}
                         </div>
-                    </ItemMedia>
-                    <ItemContent className="w-full flex flex-col gap-1">
-                        <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">
-                            <span>{config.title(row)}</span>
-                            <StatusBadge status={type === "order" ? row.deliveryStatus : row.status} />
-                        </ItemTitle>
-                        {config.subtitle(row) && (
-                            <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
-                        )}
-                    </ItemContent>
-                </div>
-                {config.showActions && !usesCustomAction && (
-                    <ItemActions>
-                        <DropdownMenuAction />
-                    </ItemActions>
-                )}
-            </div>
 
-            <div className="w-full flex items-center justify-between gap-2 px-2 pb-2">
-                {(type === "fulfillerPayout"
-                    ? config.columns.filter((col) => ["Earned", "Received"].includes(col.label))
-                    : config.columns.filter((col) => col.label !== "Status").slice(0, 2)
-                ).map((col) => (
-                    <ItemContent key={col.label}>
-                        <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
-                        <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
-                    </ItemContent>
+                        <div className="w-full flex items-center justify-between gap-2 px-2 pb-2">
+                            {(type === "fulfillerPayout"
+                                ? config.columns.filter((col) => ["Earned", "Received"].includes(col.label))
+                                : type === "supplierPayout"
+                                    ? config.columns.filter((col) => ["Subscription", "Amount"].includes(col.label))   // ← admin needs these
+                                    : config.columns.filter((col) => col.label !== "Status").slice(0, 2)
+                            ).map((col) => (
+                                <ItemContent key={col.label}>
+                                    <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
+                                    <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
+                                </ItemContent>
+                            ))}
+                        </div>
+
+                        {/* Mobile custom action (order / supplierPayout / resellerPayout) */}
+                        {usesCustomAction && (
+                            <div className="w-full px-2 pb-2 flex justify-end">
+                                {renderAction(row, true)}
+                            </div>
+                        )}
+
+                        <div className="w-full px-2 pb-2">
+                            <ItemDescription className="text-xs text-gray-500">
+                                Created {formatDate(row.createdAt)}
+                            </ItemDescription>
+                        </div>
+                    </Item>
                 ))}
             </div>
-
-            {/* Mobile custom action (order / supplierPayout / resellerPayout) */}
-            {usesCustomAction && (
-                <div className="w-full px-2 pb-2 flex justify-end">
-                    {renderAction(row, true)}
-                </div>
-            )}
-
-            <div className="w-full px-2 pb-2">
-                <ItemDescription className="text-xs text-gray-500">
-                    Created {formatDate(row.createdAt)}
-                </ItemDescription>
-            </div>
-        </Item>
-    ))}
-</div>
         </div>
     )
 }

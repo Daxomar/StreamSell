@@ -25,32 +25,35 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 
-export function DropdownMenuAction() {
+export function DropdownMenuAction({ reseller, onApprove, approveMutation }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button><MoreVerticalIcon size={12} /></Button>
+                <Button onClick={(e) => e.stopPropagation()}>
+                    <MoreVerticalIcon size={12} />
+                </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white border-0">
+            <DropdownMenuContent className="bg-white border-0" onClick={(e) => e.stopPropagation()}>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="bg-white hover:bg-gray-300/30 transition">
-                        Approve
-                        <DropdownMenuShortcut><Check></Check></DropdownMenuShortcut>
-                    </DropdownMenuItem>
+                    {!reseller?.isApproved && (
+                        <DropdownMenuItem
+                            className="bg-white hover:bg-gray-300/30 transition"
+                            disabled={approveMutation?.isPending}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                onApprove(reseller.userId)
+                            }}
+                        >
+                            Approve
+                            <DropdownMenuShortcut><Check /></DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem className="bg-white hover:bg-gray-300/30 transition">
                         View
                         <DropdownMenuShortcut><Eye /></DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="bg-white hover:bg-gray-300/30 transition">
-                        Suspend
-                        <DropdownMenuShortcut><Pause /></DropdownMenuShortcut>
-                    </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="bg-white hover:bg-gray-300/30 transition">
-                    Delete
-                    <DropdownMenuShortcut><Trash className="text-red-500" /></DropdownMenuShortcut>
-                </DropdownMenuItem>
+
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -159,7 +162,7 @@ export function ResellersList({
                             <ItemContent>
                                 <ItemTitle className="text-sm font-semibold">
                                     {reseller.status === "active" ? (
-                                        <Badge className="bg-gray-600 text-white">Active</Badge>
+                                        <Badge className="bg-green-600 text-white">Active</Badge>
                                     ) : (
                                         <Badge className="bg-yellow-600 text-white">Pending</Badge>
                                     )}
@@ -198,7 +201,11 @@ export function ResellersList({
 
                         {/* Balance & Actions */}
                         <ItemActions>
-                            <DropdownMenuAction />
+                            <DropdownMenuAction
+                                reseller={reseller}
+                                onApprove={onApprove}
+                                approveMutation={approveMutation}
+                            />
                         </ItemActions>
                     </Item>
                 ))}
@@ -213,9 +220,9 @@ export function ResellersList({
                         <div className="w-full flex items-start justify-between ">
                             <div className="w-full flex items-center p-2 gap-2 ">
                                 <ItemMedia>
-                                    <div className=" w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white  bg-[#05563E]"
+                                    <div className=" w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white  bg-[#262626]"
                                     >
-                                        {reseller.isAccountVerified ? (
+                                        {reseller.isApproved ? (
                                             <User className="h-5 w-5" />
                                         ) : (
                                             <span>!</span>
@@ -249,33 +256,37 @@ export function ResellersList({
                             </div>
                             {/* Balance & Actions */}
                             <ItemActions>
-                                <DropdownMenuAction />
+                                <DropdownMenuAction
+                                    reseller={reseller}
+                                    onApprove={onApprove}
+                                    approveMutation={approveMutation}
+                                />
                             </ItemActions>
                         </div>
                         {/* Verification Badge */}
 
                         <div className="w-full flex items-center gap-2 hidden">
                             <div className="w-full">
-                            <ItemContent>
-                                <ItemTitle className=" font-semibold">
-                                    {reseller.totalCommissionEarned === 0 ? (
-                                        <span className="">₵{formatCurrency(reseller.totalCommissionEarned)}</span>
-                                    ) : (
-                                        <span className="text-green-600">+₵{formatCurrency(reseller.totalCommissionEarned)}</span>
-                                    )}
-                                </ItemTitle>
-        
-                            </ItemContent>
-                        </div>
-                        <div className="w-full">
-                            <ItemContent>
-                                <ItemTitle className="text-sm font-semibold">
-                                    ₵{formatCurrency(reseller.totalCommissionPaidOut)}
-                                </ItemTitle>
-                            </ItemContent>
-                        </div></div>
-                        
-                       <div className="w-full ">
+                                <ItemContent>
+                                    <ItemTitle className=" font-semibold">
+                                        {reseller.totalCommissionEarned === 0 ? (
+                                            <span className="">₵{formatCurrency(reseller.totalCommissionEarned)}</span>
+                                        ) : (
+                                            <span className="text-green-600">+₵{formatCurrency(reseller.totalCommissionEarned)}</span>
+                                        )}
+                                    </ItemTitle>
+
+                                </ItemContent>
+                            </div>
+                            <div className="w-full">
+                                <ItemContent>
+                                    <ItemTitle className="text-sm font-semibold">
+                                        ₵{formatCurrency(reseller.totalCommissionPaidOut)}
+                                    </ItemTitle>
+                                </ItemContent>
+                            </div></div>
+
+                        <div className="w-full ">
                             <ItemContent className="w-full flex items-center">
                                 <ItemDescription className="text-xs text-gray-500">
                                     Joined {formatDate(reseller.createdAt)}

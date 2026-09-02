@@ -46,6 +46,7 @@ export default function VendorRegisterPage() {
         password: data.password,
         name: data.businessName,          // BetterAuth's `name` = business name
         phoneNumber: data.phoneNumber,    // additional field (must be configured in auth)
+        callbackURL: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/login?verified=true`,
       })
 
       if (error) {

@@ -41,8 +41,8 @@ export default function ResellersPage() {
   const router = useRouter();
   const queryClient = useQueryClient()
   const [isInviteOpen, setIsInviteOpen] = useState(false)
-  const {reseller} = useUser()
-  const {data:session} =useSession()
+  const { reseller } = useUser()
+  const { data: session } = useSession()
   const role = session?.user?.role
 
 
@@ -119,7 +119,7 @@ export default function ResellersPage() {
     currency: "GHS",
   }
 
- // Invite reseller mutation will delete trust me
+  // Invite reseller mutation will delete trust me
   const inviteMutation = useMutation({
     mutationFn: async (data) => {
       const response = await api(`/users/invite`, {
@@ -156,15 +156,12 @@ export default function ResellersPage() {
   // Approve reseller mutation
   const approveMutation = useMutation({
     mutationFn: async (userId) => {
-      const data = await api(`/api/v1/users/${userId}/approve`)
-
-       if (!data.success) {
-        throw new Error(err.message || "Failed to approve reseller")
-      }
+      const data = await api(`/api/v1/users/${userId}/approve`, { method: "PATCH" })
+      if (!data.success) throw new Error(data.message || "Failed to approve reseller")
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["resellers"])
+      queryClient.invalidateQueries({ queryKey: ["resellers"] })
       toast.success("Reseller approved successfully")
     },
     onError: (error) => {
@@ -177,7 +174,7 @@ export default function ResellersPage() {
     mutationFn: async (userId) => {
       const data = await api(`/api/v1/users/${userId}/reject`)
 
-        if (!data.success) {
+      if (!data.success) {
         throw new Error(err.message || "Failed to approve reseller")
       }
       return data
@@ -376,7 +373,7 @@ export default function ResellersPage() {
             )}
           </CardContent>
         </Card>
-         <Card className="rounded-xl border-slate-200/50  bg-white/40  lg:backdrop-blur-sm shadow-md hover:shadow-lg transition-all">
+        <Card className="rounded-xl border-slate-200/50  bg-white/40  lg:backdrop-blur-sm shadow-md hover:shadow-lg transition-all">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-500">Pending Approval</CardTitle>
           </CardHeader>
@@ -471,7 +468,7 @@ export default function ResellersPage() {
             searchQuery={searchQuery}
             onSearchChange={handleSearchChange}
             error={error}
-            onApprove={(id, status) => approveMutation.mutate({ id, status })}
+            onApprove={(userId) => approveMutation.mutate(userId)}
             approveMutation={approveMutation}
           />
 

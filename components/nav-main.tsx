@@ -174,7 +174,7 @@ export function NavMain({
                 style={active ? { backgroundColor: "#ffffff", color: "#000000" } : undefined}
                 className={cn(
                   "cursor-pointer transition-colors",
-                  "hover:!bg-white hover:!text-black",
+                  "hover:!bg-white/10 hover:!text-white/80",
                 )}
               >
                 {item.icon && <item.icon />}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Edit2, Search, ArrowUpDown, Loader2 } from "lucide-react"
+import { Plus, Edit2, Search, ArrowUpDown, Loader2,  } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
 import { api } from "@/lib/api"
 import toast from "react-hot-toast"
@@ -74,150 +74,336 @@ export default function SubscriptionsPage() {
     )
   }
 
+  // return (
+  //   <div className="space-y-6">
+  //     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  //       <div>
+  //         <h2 className="text-2xl font-bold tracking-tight">Subscriptions</h2>
+  //         <p className="text-sm text-slate-500">Manage subscription offerings, pricing, and availability.</p>
+  //       </div>
+  //       <Button onClick={handleAddNew} className="bg-green-600 hover:bg-green-700 text-white font-semibold">
+  //         <Plus className="mr-2 h-4 w-4" />
+  //         Add New Subscription
+  //       </Button>
+  //     </div>
+
+  //     <Card className="">
+  //       <CardHeader className="pb-4">
+  //         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+  //           <div>
+  //             <CardTitle className="">Subscription Plans</CardTitle>
+  //             <CardDescription className="">View and maintain active subscription plans.</CardDescription>
+  //           </div>
+  //           <div className="flex flex-wrap items-center gap-2">
+  //             <div className="relative w-full sm:w-56">
+  //               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+  //               <Input
+  //                 placeholder="Search subscriptions..."
+  //                 className="pl-8"
+  //                 value={searchQuery}
+  //                 onChange={(e) => setSearchQuery(e.target.value)}
+  //               />
+  //             </div>
+
+  //             <Select value={serviceFilter} onValueChange={setServiceFilter}>
+  //               <SelectTrigger className="w-44">
+  //                 <SelectValue placeholder="Service" />
+  //               </SelectTrigger>
+  //               <SelectContent className="">
+  //                 <SelectItem className="" value="all">All Services</SelectItem>
+  //                 <SelectItem className="" value="Netflix">Netflix</SelectItem>
+  //                 <SelectItem className="" value="Spotify">Spotify</SelectItem>
+  //                 <SelectItem className="" value="HBO Max">HBO Max</SelectItem>
+  //                 <SelectItem className="" value="Disney+">Disney+</SelectItem>
+  //                 <SelectItem className="" value="YouTube">YouTube</SelectItem>
+  //               </SelectContent>
+  //             </Select>
+
+  //             <Select value={sortBy} onValueChange={setSortBy}>
+  //               <SelectTrigger className="w-32">
+  //                 <SelectValue placeholder="Sort by" />
+  //               </SelectTrigger>
+  //               <SelectContent className="">
+  //                 <SelectItem className="" value="name">Name</SelectItem>
+  //                 <SelectItem className="" value="price">Price</SelectItem>
+  //                 <SelectItem className="" value="plan">Plan</SelectItem>
+  //               </SelectContent>
+  //             </Select>
+
+  //             <Button
+  //               variant="outline"
+  //               size="icon"
+  //               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+  //             >
+  //               <ArrowUpDown className="h-4 w-4" />
+  //             </Button>
+  //           </div>
+  //         </div>
+  //       </CardHeader>
+
+  //       <CardContent className="">
+  //         {isLoading ? (
+  //           <div className="flex justify-center py-8">
+  //             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+  //           </div>
+  //         ) : (
+  //           <div className="overflow-x-auto">
+  //             <Table className="">
+  //               <TableHeader className="">
+  //                 <TableRow className="">
+  //                   <TableHead className="whitespace-nowrap">ID</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Name</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Service</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Plan</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Cost</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Price</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Duration</TableHead>
+  //                   <TableHead className="whitespace-nowrap">Status</TableHead>
+  //                   <TableHead className="text-right whitespace-nowrap">Actions</TableHead>
+  //                 </TableRow>
+  //               </TableHeader>
+  //               <TableBody className="">
+  //                 {filtered.length === 0 ? (
+  //                   <TableRow className="">
+  //                     <TableCell colSpan={9} className="text-center py-8 text-slate-500">
+  //                       No subscriptions found
+  //                     </TableCell>
+  //                   </TableRow>
+  //                 ) : (
+  //                   filtered.map((sub: any) => (
+  //                     <TableRow className="" key={sub._id}>
+  //                       <TableCell className="whitespace-nowrap">{sub.subscription_id}</TableCell>
+  //                       <TableCell className="font-medium whitespace-nowrap">{sub.name}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">{sub.service}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">{sub.plan}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">{formatCurrency(sub.costPrice)}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">{formatCurrency(sub.sellingPrice)}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">{sub.duration}</TableCell>
+  //                       <TableCell className="whitespace-nowrap">
+  //                         <div className="flex items-center gap-2">
+  //                           <Switch
+  //                             className="border-2 border-[#949596]"
+  //                             checked={sub.isActive}
+  //                             onCheckedChange={() => handleToggleActive(sub)}
+  //                             disabled={toggleActiveMutation.isPending}
+  //                           />
+  //                           <Badge
+  //                             variant={sub.isActive ? "default" : "secondary"}
+  //                             className={
+  //                               sub.isActive
+  //                                 ? "bg-green-500 hover:bg-green-600 text-white font-semibold"
+  //                                 : "bg-slate-200 text-slate-600"
+  //                             }
+  //                           >
+  //                             {sub.isActive ? "Active" : "Inactive"}
+  //                           </Badge>
+  //                         </div>
+  //                       </TableCell>
+  //                       <TableCell className="text-right whitespace-nowrap">
+  //                         <Button
+  //                           size="icon"
+  //                           variant="ghost"
+  //                           className="h-8 w-8 hover:bg-slate-100"
+  //                           onClick={() => handleEdit(sub)}
+  //                         >
+  //                           <Edit2 className="h-4 w-4 text-slate-600" />
+  //                         </Button>
+  //                       </TableCell>
+  //                     </TableRow>
+  //                   ))
+  //                 )}
+  //               </TableBody>
+  //             </Table>
+  //           </div>
+  //         )}
+  //       </CardContent>
+  //     </Card>
+  //   </div>
+  // )
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Subscriptions</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Subscriptions</h2>
           <p className="text-sm text-slate-500">Manage subscription offerings, pricing, and availability.</p>
         </div>
-        <Button onClick={handleAddNew} className="bg-green-600 hover:bg-green-700 text-white font-semibold">
+        <Button onClick={handleAddNew} className="bg-[#262626] hover:bg-[#3a3a3a] text-white font-semibold">
           <Plus className="mr-2 h-4 w-4" />
           Add New Subscription
         </Button>
       </div>
 
-      <Card className="">
-        <CardHeader className="pb-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <CardTitle className="">Subscription Plans</CardTitle>
-              <CardDescription className="">View and maintain active subscription plans.</CardDescription>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative w-full sm:w-56">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search subscriptions..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+      {/* Filters */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900"></h3>
+          <p className="text-sm text-slate-500"></p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative w-full sm:w-56">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Input
+              placeholder="Search subscriptions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 py-2 rounded-lg border border-[#EEEEEE] bg-gray-200/50 focus:outline-none focus:ring-2 focus:ring-gray-500/20 placeholder:text-gray-500 transition-all"
+            />
+          </div>
+
+          <Select value={serviceFilter} onValueChange={setServiceFilter}>
+            <SelectTrigger className="w-40 bg-gray-200/50 border-[#EEEEEE]">
+              <SelectValue placeholder="Service" />
+            </SelectTrigger>
+            <SelectContent className="border border-black/5">
+              <SelectItem className="" value="all">All Services</SelectItem>
+              <SelectItem  className="" value="Netflix">Netflix</SelectItem>
+              <SelectItem className="" value="Spotify">Spotify</SelectItem>
+              <SelectItem className="" value="HBO Max">HBO Max</SelectItem>
+              <SelectItem className="" value="Disney+">Disney+</SelectItem>
+              <SelectItem className="" value="YouTube">YouTube</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-32 bg-gray-200/50 border-[#EEEEEE]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent className="border border-black/5">
+              <SelectItem className="" value="name">Name</SelectItem>
+              <SelectItem className="" value="price">Price</SelectItem>
+              <SelectItem className="" value="plan">Plan</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button
+            variant="outline"
+            size="icon"
+            className="border-[#EEEEEE] bg-gray-200/50"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* List */}
+      {isLoading ? (
+        <div className="flex justify-center py-16">
+          <Loader2 className="h-8 w-8 animate-spin text-[#262626]" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-16 text-slate-500">No subscriptions found</div>
+      ) : (
+        <div className="space-y-3">
+          {/* Desktop header row */}
+          <div className="hidden lg:grid grid-cols-[1.5fr_1fr_1fr_0.8fr_0.8fr_1fr_auto] gap-4 px-4 py-2 text-xs font-semibold text-slate-400 uppercase">
+            <span>Name</span>
+            <span>Service</span>
+            <span>Plan</span>
+            <span>Cost</span>
+            <span>Price</span>
+            <span>Status</span>
+            <span className="text-right">Actions</span>
+          </div>
+
+          {filtered.map((sub: any) => (
+            <div
+              key={sub._id}
+              className="rounded-xl bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all p-4"
+            >
+              {/* Desktop row */}
+              <div className="hidden lg:grid grid-cols-[1.5fr_1fr_1fr_0.8fr_0.8fr_1fr_auto] gap-4 items-center">
+                <div className="min-w-0">
+                  <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
+                  <p className="text-xs text-slate-400 font-mono">{sub.subscription_id}</p>
+                </div>
+                <span className="text-sm text-slate-700">{sub.service}</span>
+                <span className="text-sm text-slate-700">{sub.plan}</span>
+                <span className="text-sm text-slate-700">{formatCurrency(sub.costPrice)}</span>
+                <span className="text-sm font-semibold text-[#262626]">{formatCurrency(sub.sellingPrice)}</span>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    className="border-2 border-[#949596] data-[state=checked]:bg-[#262626]"
+                    checked={sub.isActive}
+                    onCheckedChange={() => handleToggleActive(sub)}
+                    disabled={toggleActiveMutation.isPending}
+                  />
+                      <Badge
+                    variant={sub.isActive ? "default" : "secondary"}
+                    className={
+                      sub.isActive
+                        ? "bg-green-500 hover:bg-green-600 text-white font-semibold"
+                        : "bg-slate-200 text-slate-600"
+                    }
+                  >
+                    {sub.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+                <div className="text-right">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 hover:bg-slate-100"
+                    onClick={() => handleEdit(sub)}
+                  >
+                    <Edit2 className="h-4 w-4 text-slate-600" />
+                  </Button>
+                </div>
               </div>
 
-              <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                <SelectTrigger className="w-44">
-                  <SelectValue placeholder="Service" />
-                </SelectTrigger>
-                <SelectContent className="">
-                  <SelectItem className="" value="all">All Services</SelectItem>
-                  <SelectItem className="" value="Netflix">Netflix</SelectItem>
-                  <SelectItem className="" value="Spotify">Spotify</SelectItem>
-                  <SelectItem className="" value="HBO Max">HBO Max</SelectItem>
-                  <SelectItem className="" value="Disney+">Disney+</SelectItem>
-                  <SelectItem className="" value="YouTube">YouTube</SelectItem>
-                </SelectContent>
-              </Select>
+              {/* Mobile card */}
+              <div className="lg:hidden space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
+                    <p className="text-xs text-slate-400 font-mono mt-0.5">{sub.subscription_id}</p>
+                    <p className="text-sm text-slate-500 mt-1">{sub.service} · {sub.plan}</p>
+                  </div>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 hover:bg-slate-100 shrink-0"
+                    onClick={() => handleEdit(sub)}
+                  >
+                    <Edit2 className="h-4 w-4 text-slate-600" />
+                  </Button>
+                </div>
 
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent className="">
-                  <SelectItem className="" value="name">Name</SelectItem>
-                  <SelectItem className="" value="price">Price</SelectItem>
-                  <SelectItem className="" value="plan">Plan</SelectItem>
-                </SelectContent>
-              </Select>
+                <div className="flex items-center justify-between text-sm border-t border-slate-100 pt-3">
+                  <div>
+                    <span className="text-slate-400">Cost </span>
+                    <span className="text-slate-700">{formatCurrency(sub.costPrice)}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">Price </span>
+                    <span className="font-semibold text-[#262626]">{formatCurrency(sub.sellingPrice)}</span>
+                  </div>
+                </div>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              >
-                <ArrowUpDown className="h-4 w-4" />
-              </Button>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    className="border-2 border-[#949596] data-[state=checked]:bg-[#262626]"
+                    checked={sub.isActive}
+                    onCheckedChange={() => handleToggleActive(sub)}
+                    disabled={toggleActiveMutation.isPending}
+                  />
+                  <Badge
+                    variant={sub.isActive ? "default" : "secondary"}
+                    className={
+                      sub.isActive
+                        ? "bg-green-500 hover:bg-green-600 text-white font-semibold"
+                        : "bg-slate-200 text-slate-600"
+                    }
+                  >
+                    {sub.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+              </div>
             </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="">
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table className="">
-                <TableHeader className="">
-                  <TableRow className="">
-                    <TableHead className="whitespace-nowrap">ID</TableHead>
-                    <TableHead className="whitespace-nowrap">Name</TableHead>
-                    <TableHead className="whitespace-nowrap">Service</TableHead>
-                    <TableHead className="whitespace-nowrap">Plan</TableHead>
-                    <TableHead className="whitespace-nowrap">Cost</TableHead>
-                    <TableHead className="whitespace-nowrap">Price</TableHead>
-                    <TableHead className="whitespace-nowrap">Duration</TableHead>
-                    <TableHead className="whitespace-nowrap">Status</TableHead>
-                    <TableHead className="text-right whitespace-nowrap">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="">
-                  {filtered.length === 0 ? (
-                    <TableRow className="">
-                      <TableCell colSpan={9} className="text-center py-8 text-slate-500">
-                        No subscriptions found
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filtered.map((sub: any) => (
-                      <TableRow className="" key={sub._id}>
-                        <TableCell className="whitespace-nowrap">{sub.subscription_id}</TableCell>
-                        <TableCell className="font-medium whitespace-nowrap">{sub.name}</TableCell>
-                        <TableCell className="whitespace-nowrap">{sub.service}</TableCell>
-                        <TableCell className="whitespace-nowrap">{sub.plan}</TableCell>
-                        <TableCell className="whitespace-nowrap">{formatCurrency(sub.costPrice)}</TableCell>
-                        <TableCell className="whitespace-nowrap">{formatCurrency(sub.sellingPrice)}</TableCell>
-                        <TableCell className="whitespace-nowrap">{sub.duration}</TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            <Switch
-                              className="border-2 border-[#949596]"
-                              checked={sub.isActive}
-                              onCheckedChange={() => handleToggleActive(sub)}
-                              disabled={toggleActiveMutation.isPending}
-                            />
-                            <Badge
-                              variant={sub.isActive ? "default" : "secondary"}
-                              className={
-                                sub.isActive
-                                  ? "bg-green-500 hover:bg-green-600 text-white font-semibold"
-                                  : "bg-slate-200 text-slate-600"
-                              }
-                            >
-                              {sub.isActive ? "Active" : "Inactive"}
-                            </Badge>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right whitespace-nowrap">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 hover:bg-slate-100"
-                            onClick={() => handleEdit(sub)}
-                          >
-                            <Edit2 className="h-4 w-4 text-slate-600" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

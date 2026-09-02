@@ -73,7 +73,7 @@ function ResellerLayoutContent({ children }) {
 
             <img src="/StreamsellLogo1.png" alt="Logo" className="w-12 h-12 " />
 
-            <div>
+            <div className="flex flex-col gap-none">
               <span className="block">Stream Sell</span>
               <span className="text-xs text-slate-500 font-normal">Reseller</span>
             </div>
@@ -93,8 +93,8 @@ function ResellerLayoutContent({ children }) {
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all",
                     isActive(link.href)
-                      ? "bg-gray-200 text-white hover:bg-gray-500"
-                      : "text-slate-600 hover:bg-slate-100"
+                      ? "bg-[#262626] text-white hover:bg-gray-500"
+                      : "text-slate-700 hover:bg-slate-100"
                   )}
                 >
                   {link.label}
@@ -115,7 +115,7 @@ function ResellerLayoutContent({ children }) {
                     <p className="text-sm font-semibold text-slate-900">{reseller?.name || "User"}</p>
                     <p className="text-xs text-slate-500">{reseller?.resellerCode || "---"}</p>
                   </div>
-                  <div className="w-9 h-9 rounded-full bg-cyan-500 hover:bg-cyan-600 text-white flex items-center justify-center font-semibold shadow-sm">
+                  <div className="w-9 h-9 rounded-full bg-[#262626] hover:bg-[#262626]/80 text-white flex items-center justify-center font-semibold shadow-sm">
                     {reseller?.name?.charAt(0) || <User className="h-5 w-5" />}
                   </div>
                 </>
@@ -142,9 +142,9 @@ function ResellerLayoutContent({ children }) {
                   <SheetContent side="right" className="w-72 p-0 bg-white">
                     <div className="flex flex-col h-full">
                       {/* User Info */}
-                      <div className="bg-gradient-to-r from-cyan-50 to-cyan-100 px-6 py-6 border-b border-blue-200">
+                      <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-6 py-6 border-b border-[#262626]">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-[#262626] hover:bg-gray-500/30 text-white flex items-center justify-center font-bold text-lg shadow-md">
+                          <div className="w-12 h-12 rounded-full bg-[#262626] hover:bg-[#262626]/80 text-white flex items-center justify-center font-bold text-lg shadow-md">
                             {reseller?.name?.charAt(0) || <User className="h-6 w-6" />}
                           </div>
                           <div>

@@ -74,62 +74,60 @@ export function PayoutPopup({ availableBalance = 0, onSuccess }) {
     },
   })
 
-  const payoutMutation = useMutation({
-    mutationFn: async (data) => {
-      const response = await api(`/api/v1/payout/request`, {
-        method: "POST",
-        body: JSON.stringify({
-          network: data.network,
-          phoneNumber: data.phoneNumber,
-          accountName: data.accountName,
-          amount: parseFloat(data.amount),
-          password: data.password,
-        }),
-      })
+const payoutMutation = useMutation({
+  mutationFn: async (data) => {
+    return api("/api/v1/payout/request", {
+      method: "POST",
+      body: JSON.stringify({
+        network: data.network,
+        phoneNumber: data.phoneNumber,
+        accountName: data.accountName,
+        amount: parseFloat(data.amount),
+        password: data.password,
+      }),
+    });
+  },
 
-      const result = await response.json()
+  onSuccess: (result) => {
+    toast.success(
+      result.message || "Payout request submitted successfully"
+    );
 
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to request payout")
-      }
+    queryClient.invalidateQueries({
+      queryKey: ["recentPayouts"],
+      refetchType: "active",
+    });
 
-      if (!result.success) {
-        throw new Error(result.message || "Failed to request payout")
-      }
+    queryClient.invalidateQueries({
+      queryKey: ["userData"],
+      refetchType: "active",
+    });
 
-      return result
-    },
-    onSuccess: (data) => {
-      toast.success("Payout request submitted successfully")
-      
-      // Optimized query invalidation - only invalidate what's needed
-      queryClient.invalidateQueries({ 
-        queryKey: ["recentPayouts"],
-        refetchType: 'active' // Only refetch if component is mounted
-      })
-      queryClient.invalidateQueries({ 
-        queryKey: ["userData"],
-        refetchType: 'active'
-      })
-      queryClient.invalidateQueries({ 
-        queryKey: ["resellerData"],
-        refetchType: 'active'
-      })
+    queryClient.invalidateQueries({
+      queryKey: ["resellerData"],
+      refetchType: "active",
+    });
 
-      if (onSuccess) {
-        onSuccess(data)
-      }
+    if (onSuccess) {
+      onSuccess(result);
+    }
 
-      setTimeout(() => {
-        setOpen(false)
-        reset()
-        setSelectedNetwork("")
-      }, 2000)
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to request payout")
-    },
-  })
+    setTimeout(() => {
+      setOpen(false);
+      reset();
+      setSelectedNetwork("");
+      payoutMutation.reset();
+    }, 2000);
+  },
+
+  onError: (error) => {
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Failed to request payout"
+    );
+  },
+});
 
   const watchAmount = watch("amount")
   const payoutCharge =
@@ -170,7 +168,7 @@ export function PayoutPopup({ availableBalance = 0, onSuccess }) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold"
+          className="bg-[#262626] hover:bg-[#262626]/80 text-white font-semibold"
           type="button"
         >
           <Wallet className="mr-2 h-4 w-4" />
@@ -383,7 +381,7 @@ export function PayoutPopup({ availableBalance = 0, onSuccess }) {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 h-11 bg-green-500 hover:bg-green-600"
+                  className="flex-1 h-11 bg-[#262626] hover:bg-[#262626]/80 text-white font-semibold"
                   disabled={!isValid || payoutMutation.isPending}
                 >
                   {payoutMutation.isPending ? (
