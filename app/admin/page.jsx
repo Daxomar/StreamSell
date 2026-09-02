@@ -266,7 +266,7 @@ import { PageHeader, StatCard, DataPanel, ReferralLinkCard } from "@/components/
 import { useUser } from "../contexts/UserContext"
 import { ItemList } from "@/components/dashboard/itemList"
 import { ChartBar, ChartBarInteractive } from "@/components/dashboard/chart"
-
+import Link from "next/link"
 export default function AdminDashboard() {
   //JANURY STATS
   const January = 1904.37;
@@ -387,15 +387,18 @@ export default function AdminDashboard() {
               isLoading={isLoadingReferral}
               onCopy={() => toast.success("Link copied!")}
             /> */}
-            <Button className="bg-[#262626] hover:bg-gray-300 text-white font-semibold">
-              <Plus className="mr-2 h-4 w-4" />
-              Add New Service
-            </Button>
+
+            <Link href="/admin/subscriptions/new">
+              <Button className="bg-[#262626] hover:bg-[#3a3a3a] text-white font-semibold">
+                <Plus className="mr-2 h-4 w-4" />
+                Add New Service
+              </Button>
+            </Link>
           </div>
         }
       />
 
-      <div className="flex flex-col lg:hidden w-full p-4 rounded-4xl space-y-5 text-white relative bg-[#05563E]"
+      <div className="flex flex-col lg:hidden w-full p-4 rounded-4xl space-y-5 text-white relative bg-[#262626]"
         style={{
           backgroundImage: `
       linear-gradient(135deg, rgba(5, 86, 62, 0.7) 0%, rgba(5, 86, 62, 0.6) 100%),

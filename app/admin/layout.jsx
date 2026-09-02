@@ -59,27 +59,27 @@ function DashboardHeader() {
 
 
   const handleLogout = async () => {
-  try {
-    await signOut()
-    queryClient.clear()               // wipe cached user data (no stale flash)
-    toast.success("Logged out")
-    router.push("/auth/login")        // explicit redirect (wins the race, no flicker)
-  } catch (err) {
-    console.error(err)
-    toast.error("Logout failed")
+    try {
+      await signOut()
+      queryClient.clear()               // wipe cached user data (no stale flash)
+      toast.success("Logged out")
+      router.push("/auth/login")        // explicit redirect (wins the race, no flicker)
+    } catch (err) {
+      console.error(err)
+      toast.error("Logout failed")
+    }
   }
-}
 
   return (
-    <header className="liquid-font-body sticky left-0 top-0 z-20 flex h-16 w-full shrink-0 items-center gap-2 border-b border-[#C4A962]/25 bg-[#262626] px-4 text-white shadow-[inset_0_1px_0_rgba(196,169,98,0.12)]">
+    <header className="liquid-font-body sticky left-0 top-0 z-20 flex h-16 w-full shrink-0 items-center gap-2  bg-[#262626] px-4 text-white shadow-[inset_0_1px_0_rgba(196,169,98,0.12)]">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1 text-white hover:bg-[#C4A962]/15" />
         <Separator orientation="vertical" className="mr-2 h-4 bg-[#C4A962]/40" />
-        <Breadcrumb>
+        <Breadcrumb className="hidden md:flex">
           <BreadcrumbList className="text-white">
             <BreadcrumbItem>
               <BreadcrumbLink href="/admin" className="text-white hover:text-[#C4A962]">
-            
+
               </BreadcrumbLink>
             </BreadcrumbItem>
 
@@ -142,18 +142,17 @@ function DashboardHeader() {
 // Main Layout Content
 function AdminLayoutContent({ children }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="bg-[#262626]">
       <AppSidebar />
-      <SidebarInset className="overflow-hidden">
+      <SidebarInset className="overflow-hidden md:p-2 bg-[#262626] ">
         {/* <DashboardShell
           className={`${liquidDisplay.variable} ${liquidBody.variable} min-h-svh`}
           header={<DashboardHeader />}
         > */}
         <DashboardHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-            {children}
-          </div>
-        {/* </DashboardShell> */}
+        <div className="flex bg-white flex-1 flex-col gap-4 p-4 md:p-6  md:rounded-t-xl">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )
@@ -162,14 +161,14 @@ function AdminLayoutContent({ children }) {
 // Main Layout with Providers
 export default function AdminLayout({ children }) {
   return (
-  
-      <UserProvider>
-        <RoleGate allowedRoles={["admin",]}>
-          <TransactionProvider>
-            <AdminLayoutContent>{children}</AdminLayoutContent>
-          </TransactionProvider>
-        </RoleGate>
-      </UserProvider>
- 
+
+    <UserProvider>
+      <RoleGate allowedRoles={["admin",]}>
+        <TransactionProvider>
+          <AdminLayoutContent>{children}</AdminLayoutContent>
+        </TransactionProvider>
+      </RoleGate>
+    </UserProvider>
+
   )
 }

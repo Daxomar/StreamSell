@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "components/providers.jsx", "app/manager/layout.jsx"  ],
+, "components/providers.jsx", "app/manager/layout.jsx", "app/admin/confirm-payment/reseller-payout/page.jsx"  ],
   "exclude": ["node_modules"]
 }

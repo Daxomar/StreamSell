@@ -265,7 +265,7 @@ export default function SupplierPayoutsPage() {
             </div>
 
             {/* Stats */}
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
                 <StatCard subtitle="" className="" title="Pending" value={totals.pending} icon={ClockIcon} />
                 <StatCard subtitle="" className="" title="Processing" value={totals.processing} icon={SpinnerIcon} />
                 <StatCard subtitle="" className="" title="Paid" value={totals.paid} icon={CheckIcon} />
@@ -274,17 +274,28 @@ export default function SupplierPayoutsPage() {
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v as TabKey)} className="w-full">
-                <TabsList className="border border-gray-200/50 bg-gray-200/50 rounded-md px-2 py-5 gap-2">
-                    {tabMeta.map(({ v, label, count }) => (
-                        <TabsTrigger
-                            key={v}
-                            value={v}
-                            className="data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:border data-[state=active]:shadow-lg data-[state=active]:scale-105 data-[state=active]:-translate-y-0.5 transition-all duration-200 p-4 rounded-md text-gray-500 font-medium"
-                        >
-                            {label} ({count})
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+          <TabsList className="border border-gray-200/50 bg-gray-200/50 rounded-md px-2 py-5 gap-2 hidden md:flex">
+            {tabMeta.map(({ v, label, count }) => (
+              <TabsTrigger
+                key={v}
+                value={v}
+                className="data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:border data-[state=active]:shadow-lg data-[state=active]:scale-105 data-[state=active]:-translate-y-0.5 transition-all duration-200 p-4 rounded-md text-gray-500 font-medium"
+              >
+                {label}{count != null ? ` (${count})` : ""}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsList className="w-full flex overflow-x-auto  md:hidden border border-gray-200/50 bg-gray-200/50 rounded-md p-1 gap-1 justify-start">
+            {tabMeta.map(({ v, label, count }) => (
+              <TabsTrigger
+                key={v}
+                value={v}
+                className="shrink-0 md:shrink data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 px-3 py-2.5 rounded-md text-gray-500 font-medium text-sm whitespace-nowrap"
+              >
+                {label}{count != null ? ` (${count})` : ""}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
                 {(["pending", "processing", "paid", "failed"] as const).map((tab) => (
                     <TabsContent key={tab} value={tab} className="">

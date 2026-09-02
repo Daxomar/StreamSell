@@ -362,34 +362,34 @@ function MetricCardsGrid({ data }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
       <StatCard
-        title="Available Balance"
+        title=" Balance"
         value={data.availableBalance ?? 0}
         isCurrency
-        icon={WalletIcon}
+        
       />
       <StatCard
-        title="Total Sales Volume"
+        title="Sales Volume"
         value={data.totalSales ?? 0}
         isCurrency
-        icon={ChartIcon}
+        
       />
       <StatCard
-        title="Commission Earned"
+        title=" Earned"
         value={data.totalCommissionEarned ?? 0}
         isCurrency
-        icon={CoinsIcon}
+        
       />
       <StatCard
         title="Customer Loyalty"
         value={`${cs.repeatCustomers} of ${cs.totalCustomers}`}
         subtitle={`${loyaltyPct}% repeat buyers`}
-        icon={HeartIcon}
+        
       />
       <StatCard
         title="Pending Risk"
         value={`${(data.pendingRiskPercent ?? 0).toFixed(1)}%`}
         subtitle="of transactions pending"
-        icon={WarnIcon}
+        
       />
       <StatCard
         title="Days Since Last Order"
@@ -399,7 +399,7 @@ function MetricCardsGrid({ data }) {
           : data.daysSinceLastOrder > 14 ? "slowing down"
           : "active"
         }
-        icon={ClockIcon}
+        
       />
     </div>
   )
@@ -721,7 +721,7 @@ export default function ResellerDetailPage() {
   const tier = getPerformanceTier(data.totalSales ?? 0);
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-2 md:p-6">
 
       {/* <PageHeader data={data} onBack={() => router.back()} /> */}
 

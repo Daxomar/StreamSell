@@ -1,40 +1,32 @@
-// components/QuickActions.jsx
-
 import Link from "next/link";
-import {
-  Package,
-  Truck,
-  PlusCircle,
-  Settings,
-} from "lucide-react";
+import { Package, Wallet, Truck, Users } from "lucide-react";
 
 const quickActions = [
   {
-    label: "Services",
-    href: "/dispensary/inventory",
+    label: "Add Subscription",
+    href: "/admin/subscriptions/new",
     icon: Package,
     color: "bg-[#262626] text-white",
   },
   {
-    label: "Deliveries",
-    href: "/admin/delivery-methods",
+    label: "Supplier Payouts",
+    href: "/admin/confirm-payment/supplier-payout",
     icon: Truck,
     color: "bg-[#262626] text-white",
   },
   {
-    label: "Add Products",
-    href: "/dispensary/add-medication",
-    icon: PlusCircle,
+    label: "Reseller Payouts",
+    href: "/admin/confirm-payment/reseller-payout",
+    icon: Wallet,
     color: "bg-[#262626] text-white",
   },
   {
-    label: "Settings",
-    href: "/settings",
-    icon: Settings,
+    label: "Resellers",
+    href: "/admin/resellers",
+    icon: Users,
     color: "bg-[#262626] text-white",
   },
 ];
-
 export default function QuickActions() {
   return (
     <div className="rounded-xl border-slate-200/50  bg-white/40  lg:backdrop-blur-sm shadow-md hover:shadow-lg transition-all">

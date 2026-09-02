@@ -487,20 +487,23 @@ const LIST_CONFIGS = {
     },
 
     // Fulfiller's own payout records (Level 2 — their money)
-    fulfillerPayout: {
-        gridCols: "md:grid-cols-5",
-        icon: () => <Wallet className="h-5 w-5" />,
-        title: (row) => row.subscriptionName || row.reference?.slice(-10) || "Payout",
-        subtitle: (row) => row.reference,
-        columns: [
-            { label: "Date", render: (row) => formatDate(row.createdAt) },
-            { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
-            { label: "Amount", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.amount || 0)}</span> },
-            { label: "Paid", render: (row) => (row.paidAt ? formatDate(row.paidAt) : "—") },
-        ],
-        getHref: null,
-        showActions: false,
-    },
+   fulfillerPayout: {
+    gridCols: "md:grid-cols-6",
+    icon: () => <Wallet className="h-5 w-5" />,
+    title: (row) => row.subscriptionName || row.reference?.slice(-10) || "Payout",
+    subtitle: (row) => row.reference,
+    columns: [
+        { label: "Date", render: (row) => formatDate(row.createdAt) },
+        { label: "Status", render: (row) => <StatusBadge status={row.status} /> },
+        { label: "Earned", render: (row) => <span className="text-[#262626] font-semibold">₵{formatCurrency(row.amount || 0)}</span> },
+        { label: "Fee", render: (row) => <span className="text-slate-500">−₵{formatCurrency(row.transferFee || 0)}</span> },
+        { label: "Received", render: (row) => <span className="text-green-600 font-semibold">₵{formatCurrency(row.netAmount ?? row.amount ?? 0)}</span> },
+        { label: "Paid", render: (row) => (row.paidAt ? formatDate(row.paidAt) : "—") },
+    ],
+
+    getHref: null,
+    showActions: false,
+},
 
     supplierPayout: {
         gridCols: "md:grid-cols-6",
@@ -834,15 +837,15 @@ export function List({
             </Button>
         )
     }
-    if (row.status === "processing") {
-        return <span className="text-xs text-blue-600 font-medium">Processing...</span>
-    }
-    if (row.status === "paid") {
-        return <span className="text-xs text-green-600 font-medium">Paid</span>
-    }
-    if (row.status === "failed") {
-        return null  // handled above (Retry button), but safe fallback
-    }
+    // if (row.status === "processing") {
+    //     return <span className="text-xs text-blue-600 font-medium">Processing...</span>
+    // }
+    // if (row.status === "paid") {
+    //     return <span className="text-xs text-green-600 font-medium">Paid</span>
+    // }
+    // if (row.status === "failed") {
+    //     return null  // handled above (Retry button), but safe fallback
+    // }
     return null
 }
 
@@ -926,65 +929,65 @@ export function List({
                 ))}
             </div>
 
-            {/* ── Mobile ── */}
-            <div className="space-y-3 block md:hidden">
-                {items.map((row) => (
-                    <Item
-                        key={row._id}
-                        className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid ${config.getHref ? "cursor-pointer" : ""}`}
-                        onClick={() => handleClick(row)}
-                    >
-                        <div className="w-full flex items-start justify-between">
-                            <div className="w-full flex items-center p-2 gap-2">
-                                <ItemMedia>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
-                                        {config.icon(row)}
-                                    </div>
-                                </ItemMedia>
-                                <ItemContent className="w-full flex flex-col gap-1">
-                                    <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">
-                                        <span>{config.title(row)}</span>
-                                        <StatusBadge status={type === "order" ? row.deliveryStatus : row.status} />
-                                    </ItemTitle>
-                                    {config.subtitle(row) && (
-                                        <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
-                                    )}
-                                </ItemContent>
-                            </div>
-                            {config.showActions && !usesCustomAction && (
-                                <ItemActions>
-                                    <DropdownMenuAction />
-                                </ItemActions>
-                            )}
+  {/* ── Mobile ── */}
+<div className="space-y-3 block md:hidden">
+    {items.map((row) => (
+        <Item
+            key={row._id}
+            className={`border-y-slate-200/30 bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all grid ${config.getHref ? "cursor-pointer" : ""}`}
+            onClick={() => handleClick(row)}
+        >
+            <div className="w-full flex items-start justify-between">
+                <div className="w-full flex items-center p-2 gap-2">
+                    <ItemMedia>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
+                            {config.icon(row)}
                         </div>
-
-                        <div className="w-full flex items-center justify-between gap-2 px-2 pb-2">
-                            {config.columns
-                                .filter((col) => col.label !== "Status")
-                                .slice(0, 2)
-                                .map((col) => (
-                                    <ItemContent key={col.label}>
-                                        <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
-                                        <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
-                                    </ItemContent>
-                                ))}
-                        </div>
-
-                        {/* Mobile custom action (order / supplierPayout / resellerPayout) */}
-                        {usesCustomAction && (
-                            <div className="w-full px-2 pb-2 flex justify-end">
-                                {renderAction(row, true)}
-                            </div>
+                    </ItemMedia>
+                    <ItemContent className="w-full flex flex-col gap-1">
+                        <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">
+                            <span>{config.title(row)}</span>
+                            <StatusBadge status={type === "order" ? row.deliveryStatus : row.status} />
+                        </ItemTitle>
+                        {config.subtitle(row) && (
+                            <ItemDescription className="text-xs text-gray-500">{config.subtitle(row)}</ItemDescription>
                         )}
+                    </ItemContent>
+                </div>
+                {config.showActions && !usesCustomAction && (
+                    <ItemActions>
+                        <DropdownMenuAction />
+                    </ItemActions>
+                )}
+            </div>
 
-                        <div className="w-full px-2 pb-2">
-                            <ItemDescription className="text-xs text-gray-500">
-                                Created {formatDate(row.createdAt)}
-                            </ItemDescription>
-                        </div>
-                    </Item>
+            <div className="w-full flex items-center justify-between gap-2 px-2 pb-2">
+                {(type === "fulfillerPayout"
+                    ? config.columns.filter((col) => ["Earned", "Received"].includes(col.label))
+                    : config.columns.filter((col) => col.label !== "Status").slice(0, 2)
+                ).map((col) => (
+                    <ItemContent key={col.label}>
+                        <ItemTitle className="text-sm font-semibold">{col.render(row)}</ItemTitle>
+                        <ItemDescription className="text-xs text-gray-500">{col.label}</ItemDescription>
+                    </ItemContent>
                 ))}
             </div>
+
+            {/* Mobile custom action (order / supplierPayout / resellerPayout) */}
+            {usesCustomAction && (
+                <div className="w-full px-2 pb-2 flex justify-end">
+                    {renderAction(row, true)}
+                </div>
+            )}
+
+            <div className="w-full px-2 pb-2">
+                <ItemDescription className="text-xs text-gray-500">
+                    Created {formatDate(row.createdAt)}
+                </ItemDescription>
+            </div>
+        </Item>
+    ))}
+</div>
         </div>
     )
 }

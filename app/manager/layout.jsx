@@ -27,6 +27,8 @@ import RoleGate from "../contexts/RoleGate"
 import { api } from "../../lib/api"
 import toast from "react-hot-toast"
 import { useTheme } from "next-themes"
+import { signOut } from "@/lib/auth-client"
+import { useQueryClient } from "@tanstack/react-query"
 
 
 // Header Component
@@ -52,25 +54,19 @@ function DashboardHeader() {
   }
 
   const breadcrumbs = getBreadcrumbs()
+const queryClient = useQueryClient()
 
-
-  const handleLogout = async () => {
-    try {
-      const res = await api(`/auth/sign-out`, {
-        method: 'POST',
-      });
-
-      if (res.ok) {
-        toast.success('Logged out successfully');
-        window.location.href = '/auth/login';
-      } else {
-        toast.error('Logout failed');
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error('Logout failed');
-    }
-  };
+const handleLogout = async () => {
+  try {
+    await signOut()
+    queryClient.clear()
+    toast.success("Logged out")
+    router.push("/auth/login")
+  } catch (err) {
+    console.error("LOGOUT ERROR:", err)   // ← what does this actually say?
+    toast.error("Logout failed")
+  }
+}
 
   return (
     <header className="liquid-font-body sticky left-0 top-0 z-20 flex h-16 w-full shrink-0 items-center gap-2 border-b border-[#C4A962]/25 bg-[#262626] px-4 text-white shadow-[inset_0_1px_0_rgba(196,169,98,0.12)]">

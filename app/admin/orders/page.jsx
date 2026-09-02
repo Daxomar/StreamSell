@@ -291,7 +291,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Overall stats (shared) */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Realized Revenue (This Month)"
           value={stats?.revenue?.realized ?? 0}
@@ -299,14 +299,14 @@ export default function OrdersPage() {
           subtitle={`Potential: ${stats?.revenue?.potential ?? 0}`}
           icon={WalletIcon}
         />
-        <StatCard title="Pending" value={stats?.counts?.pending ?? 0} icon={() => <i className="fa-solid fa-clock" />} />
-        <StatCard title="Processing" value={stats?.counts?.processing ?? 0} icon={() => <i className="fa-solid fa-spinner" />} />
-        <StatCard title="Failed" value={stats?.counts?.failed ?? 0} icon={() => <i className="fa-solid fa-triangle-exclamation" />} />
+        <StatCard title="Pending" value={stats?.counts?.pending ?? 0} icon={() => <i className="fa-solid fa-clock text-gray-500" />} />
+        <StatCard title="Processing" value={stats?.counts?.processing ?? 0} icon={() => <i className="fa-solid fa-spinner text-gray-500" />} />
+        <StatCard title="Failed" value={stats?.counts?.failed ?? 0} icon={() => <i className="fa-solid fa-triangle-exclamation text-gray-500" />} />
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="border border-gray-200/50 bg-gray-200/50 rounded-md px-2 py-5 gap-2">
+        <TabsList className="border border-gray-200/50 bg-gray-200/50 rounded-md px-2 py-5 gap-2 hidden md:flex">
           {tabMeta.map(({ v, label, count }) => (
             <TabsTrigger
               key={v}
@@ -317,6 +317,18 @@ export default function OrdersPage() {
             </TabsTrigger>
           ))}
         </TabsList>
+        <TabsList className="w-full flex overflow-x-auto  md:hidden border border-gray-200/50 bg-gray-200/50 rounded-md p-1 gap-1 justify-start">
+          {tabMeta.map(({ v, label, count }) => (
+            <TabsTrigger
+              key={v}
+              value={v}
+              className="shrink-0 md:shrink data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-lg transition-all duration-200 px-3 py-2.5 rounded-md text-gray-500 font-medium text-sm whitespace-nowrap"
+            >
+              {label}{count != null ? ` (${count})` : ""}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
 
         {["pending", "processing", "delivered", "failed"].map((tab) => (
           <TabsContent key={tab} value={tab}>

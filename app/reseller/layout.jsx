@@ -71,10 +71,10 @@ function ResellerLayoutContent({ children }) {
           {/* Logo */}
           <Link href="/reseller" className="flex items-center gap-2 font-bold text-lg text-slate-900 hover:opacity-80 transition-opacity">
 
-            <img src="/logo.jpg" alt="Logo" className="w-12 h-12 " />
+            <img src="/StreamsellLogo1.png" alt="Logo" className="w-12 h-12 " />
 
             <div>
-              <span className="block">JoyBundle</span>
+              <span className="block">Stream Sell</span>
               <span className="text-xs text-slate-500 font-normal">Reseller</span>
             </div>
           </Link>
@@ -93,7 +93,7 @@ function ResellerLayoutContent({ children }) {
                   className={cn(
                     "px-3 py-2 rounded-lg text-sm font-medium transition-all",
                     isActive(link.href)
-                      ? "bg-blue-50 text-blue-600"
+                      ? "bg-gray-200 text-white hover:bg-gray-500"
                       : "text-slate-600 hover:bg-slate-100"
                   )}
                 >
@@ -144,7 +144,7 @@ function ResellerLayoutContent({ children }) {
                       {/* User Info */}
                       <div className="bg-gradient-to-r from-cyan-50 to-cyan-100 px-6 py-6 border-b border-blue-200">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 rounded-full bg-cyan-500 hover:bg-cyan-600 text-white flex items-center justify-center font-bold text-lg shadow-md">
+                          <div className="w-12 h-12 rounded-full bg-[#262626] hover:bg-gray-500/30 text-white flex items-center justify-center font-bold text-lg shadow-md">
                             {reseller?.name?.charAt(0) || <User className="h-6 w-6" />}
                           </div>
                           <div>
@@ -163,7 +163,7 @@ function ResellerLayoutContent({ children }) {
                               className={cn(
                                 "block px-4 py-3 rounded-lg font-medium transition-all",
                                 isActive(link.href)
-                                  ? "bg-blue-50 text-cyan-500 border-l-4 border-cyan-500 hover:text-white hover:bg-cyan-600"
+                                  ? "bg-[#262626] text-white hover:bg-gray-500"
                                   : "text-slate-700 hover:bg-slate-100"
                               )}
                             >
@@ -196,7 +196,7 @@ function ResellerLayoutContent({ children }) {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 md:px-20 py-8">
         {children}
       </main>
     </div>

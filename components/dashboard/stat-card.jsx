@@ -26,9 +26,9 @@ export function StatCard({
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium ">{title}</p>
+        <p className="text-sm font-medium text-gray-500 ">{title}</p>
         {Icon && (
-          <Icon className="h-4 w-4 shrink-0 text-red-600" aria-hidden />
+          <Icon className="h-4 w-4 shrink-0 text-gray-500" aria-hidden />
         )}
       </div>
 
@@ -36,14 +36,14 @@ export function StatCard({
         {isLoading ? (
           <div className="h-8 w-28 animate-pulse rounded-md bg-[#03563E]/10" />
         ) : (
-          <p className="liquid-font-display text-2xl font-semibold tabular-nums">
+          <p className=" text-2xl font-semibold tabular-nums ">
             {displayValue}
           </p>
         )}
       </div>
 
       {subtitle && (
-        <div className="mt-2 text-sm ">
+        <div className="mt-2 text-sm text-gray-500">
           {isLoading ? (
             <div className="h-4 w-36 animate-pulse rounded bg-[#03563E]/8" />
           ) : (

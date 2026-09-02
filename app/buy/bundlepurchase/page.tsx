@@ -460,14 +460,23 @@ import { useResellerCode } from "@/app/contexts/ResellerCodeContext"
 import toast from "react-hot-toast"
 import { useQuery } from "@tanstack/react-query"
 
-const MOOLRE_FEES = 0.03
+// remove: const MOOLRE_FEES = 0.03
+
+// add the same fee logic (mirror the backend):
+function moolreCollectionFee(amount: number): number {
+  const clamp = (amt: number, rate: number, min: number, cap: number) =>
+    Math.min(Math.max(amt * rate, min), cap)
+  const moolrePart = clamp(amount, 0.01, 0.50, 10)
+  const networkPart = clamp(amount, 0.01, 0, 20)
+  return moolrePart + networkPart
+}
 
 const SERVICE_STYLES: Record<string, { icon: string; color: string; bg: string }> = {
-  "Netflix":     { icon: "fa-brands fa-square-facebook", color: "#E50914", bg: "bg-red-50 hover:bg-red-100" },
-  "Spotify":     { icon: "fa-brands fa-spotify",         color: "#1DB954", bg: "bg-green-50 hover:bg-green-100" },
-  "HBO Max":     { icon: "fa-solid fa-clapperboard",     color: "#8b5cf6", bg: "bg-purple-50 hover:bg-purple-100" },
-  "Disney+":     { icon: "fa-brands fa-disney" as any,   color: "#113CCF", bg: "bg-blue-50 hover:bg-blue-100" },
-  "YouTube":     { icon: "fa-brands fa-youtube",         color: "#FF0000", bg: "bg-red-50 hover:bg-red-100" },
+  "Netflix": { icon: "fa-brands fa-square-facebook", color: "#E50914", bg: "bg-red-50 hover:bg-red-100" },
+  "Spotify": { icon: "fa-brands fa-spotify", color: "#1DB954", bg: "bg-green-50 hover:bg-green-100" },
+  "HBO Max": { icon: "fa-solid fa-clapperboard", color: "#8b5cf6", bg: "bg-purple-50 hover:bg-purple-100" },
+  "Disney+": { icon: "fa-brands fa-disney" as any, color: "#113CCF", bg: "bg-blue-50 hover:bg-blue-100" },
+  "YouTube": { icon: "fa-brands fa-youtube", color: "#FF0000", bg: "bg-red-50 hover:bg-red-100" },
 }
 const DEFAULT_SERVICE_STYLE = { icon: "fa-solid fa-play", color: "#262626", bg: "bg-slate-50 hover:bg-slate-100" }
 
@@ -483,7 +492,7 @@ type Subscription = {
   isActive: boolean
 }
 
-type PaymentData = { status?: string; txstatus?: number; reference?: string; amount?: number; [key: string]: any }
+type PaymentData = { status?: string; txstatus?: number; reference?: string; amount?: number;[key: string]: any }
 
 export default function BuyPage() {
   const [step, setStep] = useState<number>(1)
@@ -551,10 +560,14 @@ export default function BuyPage() {
     setVerifying(true)
     setError(null)
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/verify/${reference}`,
-        { method: "GET", headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" } }
-      )
+    const response = await fetch(
+  `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/verify/${reference}`,
+  {
+    method: "GET",
+    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
+    credentials: "include",   // ← stores the Set-Cookie from verify (the device cookie)
+  }
+)
       const data = await response.json()
 
       // Moolre verify service returns: { status, reference, txstatus, paid, failed, pending, raw }
@@ -620,7 +633,7 @@ export default function BuyPage() {
           // callback_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/webhook`,
           // redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/bundlepurchase?resellerCode=${resellerCode}`,
           callback_url: `https://6071-154-162-23-211.ngrok-free.app/api/v1/payments/moolre/webhook`,
-          redirect_url: `https://0933-154-162-23-211.ngrok-free.app/buy/bundlepurchase?resellerCode=${resellerCode}`,
+          redirect_url: `http://localhost:3000/buy/bundlepurchase?resellerCode=${resellerCode}`,
         }),
       })
 
@@ -659,6 +672,9 @@ export default function BuyPage() {
             <Link href="/support" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Support
             </Link>
+             <Link href="/recent-orders" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
+              <HelpCircle className="h-4 w-4" /> Recent Orders
+            </Link>
           </nav>
           <div className="sm:hidden">
             <Sheet>
@@ -674,6 +690,9 @@ export default function BuyPage() {
                   </Link>
                   <Link href="/support" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
                     Support
+                  </Link>
+                  <Link href="/recent-orders" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
+                    Recent Orders
                   </Link>
                 </nav>
               </SheetContent>
@@ -829,12 +848,12 @@ export default function BuyPage() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-500">Fees</span>
-                      <span className="font-medium">{formatCurrency((selectedSubscription?.price || 0) * MOOLRE_FEES)}</span>
+                      <span className="font-medium">{formatCurrency(moolreCollectionFee(selectedSubscription?.price || 0))}</span>
                     </div>
                     <div className="border-t pt-2 mt-2 flex justify-between">
                       <span className="font-bold">Total</span>
                       <span className="font-bold text-[#262626] text-lg">
-                        {formatCurrency((selectedSubscription?.price || 0) + (selectedSubscription?.price || 0) * MOOLRE_FEES)}
+                        {formatCurrency((selectedSubscription?.price || 0) + moolreCollectionFee(selectedSubscription?.price || 0))}
                       </span>
                     </div>
                   </div>
@@ -869,8 +888,8 @@ export default function BuyPage() {
                 <div className="flex flex-col items-center text-center space-y-4 py-6">
                   <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mb-2",
                     paymentStatus === "success" ? "bg-green-100 text-green-600"
-                    : paymentStatus === "pending" ? "bg-amber-100 text-amber-600"
-                    : "bg-red-100 text-red-600")}>
+                      : paymentStatus === "pending" ? "bg-amber-100 text-amber-600"
+                        : "bg-red-100 text-red-600")}>
                     {paymentStatus === "pending"
                       ? <Loader2 className="w-10 h-10 animate-spin" />
                       : <CheckCircle2 className="w-10 h-10" />}
@@ -879,7 +898,7 @@ export default function BuyPage() {
                     <h3 className="font-bold text-xl capitalize">
                       {paymentStatus === "success" ? "Payment Successful!"
                         : paymentStatus === "pending" ? "Payment Processing"
-                        : "Payment Failed"}
+                          : "Payment Failed"}
                     </h3>
                     {paymentStatus === "success" ? (
                       <p className="text-slate-500 max-w-[260px] mx-auto">Your {selectedSubscription?.name} subscription is being processed and the details will be sent to {customerPhone} shortly.</p>

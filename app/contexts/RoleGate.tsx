@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
 import { Loader2 } from "lucide-react"
-
+import VendlyLifeAvater from "../../components/vendly-loader"
 export default function RoleGate({
   children,
   allowedRoles = [],
@@ -14,6 +14,7 @@ export default function RoleGate({
 }) {
   const router = useRouter()
   const { data: session, isPending } = useSession()
+ const [minTimePassed, setMinTimePassed] = useState(false)
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -21,13 +22,26 @@ export default function RoleGate({
     }
   }, [isPending, session, router])
 
+useEffect(() => {
+  const timer = setTimeout(() => setMinTimePassed(true), 1000)  // minimum 800ms
+  return () => clearTimeout(timer)
+}, [])
+
+
+
   // Still loading the session
-  if (isPending) {
+  if (isPending || !minTimePassed){
     return (
-      <div className="flex items-center justify-center h-screen bg-slate-50">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-600 text-sm">Verifying access...</p>
+          <VendlyLifeAvater loading={isPending} />
+          <p className="text-gray-600 text-5xl font-bold">
+            <span className="inline-flex gap-1 ml-1">
+              <span className="animate-bounce" style={{ animationDelay: '0s' }}>.</span>
+              <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>.</span>
+              <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>.</span>
+            </span>
+          </p>
         </div>
       </div>
     )
@@ -43,7 +57,7 @@ export default function RoleGate({
           <p className="text-slate-500 mb-8">You don't have permission to access this page.</p>
           <button
             onClick={() => router.push("/buy")}
-            className="px-6 py-2 rounded-lg bg-[#05563E] hover:bg-green-700 text-white font-semibold transition"
+            className="px-6 py-2 rounded-lg bg-[#262626] hover:bg-gray-500/30 text-white font-semibold transition"
           >
             Go to Store
           </button>
