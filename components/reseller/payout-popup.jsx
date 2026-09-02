@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Wallet, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
+import { api } from "../../lib/api"
 // import { fetchWithAuth } from "@/lib/utility/fetchWithAuth"
 
 // Payout validation schema
@@ -75,7 +76,7 @@ export function PayoutPopup({ availableBalance = 0, onSuccess }) {
 
   const payoutMutation = useMutation({
     mutationFn: async (data) => {
-      const response = await fetchWithAuth(`/payout/request`, {
+      const response = await api(`/payout/request`, {
         method: "POST",
         body: JSON.stringify({
           network: data.network,
