@@ -76,7 +76,7 @@ export function PayoutPopup({ availableBalance = 0, onSuccess }) {
 
   const payoutMutation = useMutation({
     mutationFn: async (data) => {
-      const response = await api(`/payout/request`, {
+      const response = await api(`/api/v1/payout/request`, {
         method: "POST",
         body: JSON.stringify({
           network: data.network,
