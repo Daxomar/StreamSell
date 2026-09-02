@@ -753,8 +753,8 @@ export function List({
     onPay = null,
     paying = false,
     onView = null,
-    onEdit, 
-    onEditing,
+    onEdit = null,        // ← add with default null (optional)
+    onEditing = false,
     onConfirm = null,
     onReject = null,
 }) {
@@ -793,35 +793,35 @@ export function List({
         router.push(config.getHref(row, role))
     }
 
- const renderOrderAction = (row, fullWidth = false) => {
-  const base = `${fullWidth ? "w-full" : ""}`
+    const renderOrderAction = (row, fullWidth = false) => {
+        const base = `${fullWidth ? "w-full" : ""}`
 
-  if (row.deliveryStatus === "pending" && onClaim) {
-    return (
-      <Button size="sm" disabled={claiming} className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
-        onClick={(e) => { e.stopPropagation(); onClaim(row); }}>
-        {claiming ? "..." : "Claim"}
-      </Button>
-    )
-  }
-  if (row.deliveryStatus === "processing" && onFulfill) {
-    return (
-      <Button size="sm" className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
-        onClick={(e) => { e.stopPropagation(); onFulfill(row); }}>
-        Fulfill
-      </Button>
-    )
-  }
-  if (row.deliveryStatus === "delivered" && onEdit) {
-    return (
-      <Button size="sm" variant="outline" className="border-[#262626] text-[#262626] hover:bg-slate-100"
-        onClick={(e) => { e.stopPropagation(); onEdit(row); }}>
-        <i className="fa-solid fa-pen mr-1" /> Edit
-      </Button>
-    )
-  }
-  return null
-}
+        if (row.deliveryStatus === "pending" && onClaim) {
+            return (
+                <Button size="sm" disabled={claiming} className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
+                    onClick={(e) => { e.stopPropagation(); onClaim(row); }}>
+                    {claiming ? "..." : "Claim"}
+                </Button>
+            )
+        }
+        if (row.deliveryStatus === "processing" && onFulfill) {
+            return (
+                <Button size="sm" className="bg-[#262626] hover:bg-[#3a3a3a] text-white"
+                    onClick={(e) => { e.stopPropagation(); onFulfill(row); }}>
+                    Fulfill
+                </Button>
+            )
+        }
+        if (row.deliveryStatus === "delivered" && onEdit) {
+            return (
+                <Button size="sm" variant="outline" className="border-[#262626] text-[#262626] hover:bg-slate-100"
+                    onClick={(e) => { e.stopPropagation(); onEdit(row); }}>
+                    <i className="fa-solid fa-pen mr-1" /> Edit
+                </Button>
+            )
+        }
+        return null
+    }
 
     // SUPPLIER PAYOUT row → pay (pending) / processing / paid
     const renderSupplierAction = (row, fullWidth = false) => {
