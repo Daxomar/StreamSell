@@ -632,8 +632,8 @@ export default function BuyPage() {
           // Moolre server-to-server webhook:
           // callback_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/webhook`,
           // redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/bundlepurchase?resellerCode=${resellerCode}`,
-          callback_url: `https://b7b8-154-162-53-59.ngrok-free.app/api/v1/payments/moolre/webhook`,
-          redirect_url: `http://localhost:3000/buy/bundlepurchase?resellerCode=${resellerCode}`,
+          callback_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/webhook`,
+          redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/bundlepurchase?resellerCode=${resellerCode}`,
         }),
       })
 
