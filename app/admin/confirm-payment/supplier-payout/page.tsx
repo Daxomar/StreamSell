@@ -300,7 +300,7 @@ export default function SupplierPayoutsPage() {
                 {(["pending", "processing", "paid", "failed"] as const).map((tab) => (
                     <TabsContent key={tab} value={tab} className="">
                         <Card className="w-full border-none shadow-none py-2">
-                            <List
+                            {/* <List
                                 items={(activeTab === tab ? payouts : []) as any}
                                 type="supplierPayout"
                                 isLoading={activeTab === tab && isLoading}
@@ -308,6 +308,16 @@ export default function SupplierPayoutsPage() {
                                 error={error as any}
                                 onPay={(((tab === "pending" || tab === "failed") ? (row: any) => validateMutation.mutate(row._id) : null)) as any}
                                 paying={validateMutation.isPending}
+                            /> */}
+
+                                 <List
+                                items={(activeTab === tab ? payouts : []) as any}
+                                type="supplierPayout"
+                                isLoading={activeTab === tab && isLoading}
+                                isError={activeTab === tab && isError}
+                                error={error as any}
+                                onPay={(((tab === "pending" || tab === "failed") ? (row: any) => initiateMutation.mutate(row._id) : null)) as any}
+                                paying={initiateMutation.isPending}
                             />
 
                             {pagination && pagination.pages > 1 && (
