@@ -47,6 +47,11 @@ export function SubscriptionCardDetails({ className }: { className?: string }) {
               <Label htmlFor="duration">Duration</Label>
               <Input id="duration" {...register("duration")} placeholder="1 month" className={inputStyles} />
             </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="supportDevice">Support Device</Label>
+              <Input id="supportDevice" {...register("supportDevice")} placeholder="Smart TV, Mobile, Desktop" className={inputStyles} />
+            </div>
           </div>
         </CardContent>
       </Card>

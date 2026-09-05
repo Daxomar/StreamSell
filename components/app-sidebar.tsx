@@ -640,8 +640,8 @@ export function AppSidebar({ ...props }) {
         <SidebarHeader>
           <div className="flex flex-col items-center justify-center gap-2 px-2 py-1">
             {/* <span className="font-bold text-center sidebar-text text-white p-3 border-2 w-12 h-12 border-white rounded-full">ST</span> */}
-            <img src="/StreamsellLogo1.png" alt="Logo" className="h-20 w-25  p-2 border-white rounded-full" />
-            <span className="font-bold text-center sidebar-text text-white ">STREAMSELL</span>
+            <img src="/stream-sell-white-exact.svg" alt="Logo" className="h-25 w-30  p-2 border-white rounded-full" />
+            {/* <span className="font-bold text-center sidebar-text text-white ">STREAMSELL</span> */}
           </div>
 
         </SidebarHeader>

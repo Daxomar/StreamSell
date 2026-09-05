@@ -30,7 +30,7 @@ export function SubscriptionForm({ mode, subscriptionId, initialData }: Props) {
     // create → empty; edit → pre-filled with initialData
     defaultValues: {
       subscription_id: "", name: "", service: "", plan: "",
-      duration: "", costPrice: "", sellingPrice: "", recommendedRange: "", stock: "",
+      duration: "", costPrice: "", sellingPrice: "", recommendedRange: "", stock: "", supportDevice:"",
       ...initialData,   // spreads over the empty defaults for edit
     },
   })
@@ -46,6 +46,7 @@ export function SubscriptionForm({ mode, subscriptionId, initialData }: Props) {
         costPrice: Number(data.costPrice),
         sellingPrice: Number(data.sellingPrice),
         recommendedRange: data.recommendedRange,
+        supportDevice: data.supportDevice,
       }
 
       // create → POST /create ; edit → PATCH /:id/update

@@ -40,6 +40,7 @@ export default function EditSubscriptionPage() {
     costPrice: String(sub.costPrice ?? ""),       // number → string for the form
     sellingPrice: String(sub.sellingPrice ?? ""), // number → string
     recommendedRange: sub.recommendedRange ?? "",
+    supportDevice: sub.supportDevice ?? "",
     stock: "",
   }
 

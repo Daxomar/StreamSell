@@ -490,6 +490,7 @@ type Subscription = {
   imageUrl?: string
   price: number
   isActive: boolean
+  supportDevice:string
 }
 
 type PaymentData = { status?: string; txstatus?: number; reference?: string; amount?: number;[key: string]: any }
@@ -813,7 +814,7 @@ export default function BuyPage() {
                         <div>
                           <p className="font-medium group-hover:text-[#262626]">{sub.name}</p>
                           <p className="text-xs text-slate-500">
-                            {sub.plan ? sub.plan : ""}{sub.plan && sub.duration ? " • " : ""}{sub.duration ? sub.duration : ""}
+                            {sub.plan ? sub.plan : ""}{sub.plan && sub.duration ? " • " : ""}{sub.duration ? sub.duration : ""}{sub.supportDevice ? ` • ${sub.supportDevice}` : ""}
                           </p>
                         </div>
                         <Badge variant="secondary" className="text-base px-3 py-1">{formatCurrency(sub.price)}</Badge>
@@ -840,6 +841,12 @@ export default function BuyPage() {
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-500">Plan</span>
                         <span className="font-medium">{selectedSubscription.plan}</span>
+                      </div>
+                    )}
+                    {selectedSubscription?.supportDevice && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Supported Device</span>
+                        <span className="font-medium">{selectedSubscription.supportDevice}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-sm">

@@ -21,6 +21,7 @@ export const subscriptionSchema = z
     recommendedRange: z.string().optional(),
     stock: z.string().optional(),      // kept for Vendly reuse, not sent to StreamHub
     image: z.any().optional(),         // File object, optional, not sent to StreamHub
+    supportDevice: z.string().optional(),  // kept for sent to StreamHub
   })
   // business rule: selling must be >= cost (mirrors the backend guard)
   .refine((data) => Number(data.sellingPrice) >= Number(data.costPrice), {
