@@ -18,7 +18,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { HelpCircle, Menu, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname} from "next/navigation"
 
 interface Complaint {
   _id: string
@@ -38,8 +38,6 @@ export default function MyComplaintsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const pathname = usePathname()
   const isActive = (path: string) => (path === "/" ? pathname === "/" : pathname?.startsWith(path))
 const [page, setPage] = useState(1)

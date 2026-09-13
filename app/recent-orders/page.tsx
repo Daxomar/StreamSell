@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 import toast from "react-hot-toast"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { ServiceAvatar } from "../admin/subscriptions/page"
 
 const LIMIT = 10
@@ -141,8 +141,6 @@ function CredentialRow({ label, value, masked }: { label: string; value: string;
 }
 export default function MyOrdersPage() {
   const [page, setPage] = useState(1)
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const pathname = usePathname()
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["myOrders", page],
