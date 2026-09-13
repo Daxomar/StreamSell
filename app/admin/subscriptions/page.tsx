@@ -114,6 +114,7 @@ export const ServiceAvatar = ({ service, size = "md" }: ServiceAvatarProps) => {
         alt={service}
         width={40}
         height={40}
+        loading="lazy"
         className="w-full h-full object-contain"
       />
     </div>
