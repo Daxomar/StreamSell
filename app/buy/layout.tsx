@@ -2,6 +2,7 @@
 
 import { Suspense, ReactNode } from "react"
 import { ResellerProvider } from "../contexts/ResellerCodeContext"
+import { ComplaintBubble } from "@/components/complaints"
 
 export default function SubscriptionPurchaseLayout({ children }: { children: ReactNode }) {
   return (
@@ -18,6 +19,7 @@ export default function SubscriptionPurchaseLayout({ children }: { children: Rea
           }
         >
           {children}
+          <ComplaintBubble isPublic={true} />
         </Suspense>
       </ResellerProvider>
     </div>

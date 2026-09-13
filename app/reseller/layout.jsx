@@ -11,7 +11,7 @@ import { Zap, LogOut, User, Menu, Loader2 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-
+import { ComplaintBubble } from "../../components/complaints/ComplaintBubble"
 // Imports
 // import { UserProvider, useUser } from "../contexts/UserContext"
 // import {AuthProvider, useAuth } from "../contexts/AuthContext"
@@ -60,6 +60,7 @@ function ResellerLayoutContent({ children }) {
     { href: "/reseller/pricing", label: "Pricing" },
     { href: "/reseller/earnings", label: "Earnings" },
     { href: "/reseller/support", label: "Support" },
+    { href: "/reseller/complaints", label: "Complaints" },
   ]
 
   return (
@@ -71,11 +72,11 @@ function ResellerLayoutContent({ children }) {
           {/* Logo */}
           <Link href="/reseller" className="flex items-center gap-2 font-bold text-lg text-slate-900 hover:opacity-80 transition-opacity">
 
-            <img src="/StreamsellLogo1.png" alt="Logo" className="w-12 h-12 " />
+            <img src="/streamselllogo3.jpeg" alt="Logo" className="w-12 h-12 " />
 
             <div className="flex flex-col gap-none">
-              <span className="block">Stream Sell</span>
-              <span className="text-xs text-slate-500 font-normal">Reseller</span>
+              {/* <span className="block">Stream Sell</span> */}
+              <span className="text-xs  font-semibold">Reseller</span>
             </div>
           </Link>
           <div className="flex items-center gap-4 flex-1 justify-end">
@@ -212,7 +213,10 @@ export default function ResellerLayout({ children }) {
     <UserProvider>
       <RoleGate allowedRoles={["user"]}>
         <ProfileCompletionGate>
-          <ResellerLayoutContent>{children}</ResellerLayoutContent>
+          <ResellerLayoutContent>
+            {children}
+            <ComplaintBubble isPublic={false} />
+            </ResellerLayoutContent>
         </ProfileCompletionGate>
       </RoleGate>
     </UserProvider>

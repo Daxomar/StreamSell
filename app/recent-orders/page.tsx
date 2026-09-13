@@ -10,16 +10,44 @@ import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 import toast from "react-hot-toast"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { ServiceAvatar } from "../admin/subscriptions/page"
 
 const LIMIT = 10
 type Order = {
   reference: string
   subscriptionName: string
   service?: string
+  metadata?: {
+    service?: string
+    deliveryStatus?: string
+  }
   amount: number
   deliveryStatus: string
   credentials?: { loginEmail?: string; loginPassword?: string } | null   // ← was string
   createdAt: string
+}
+
+export const normalizeService = (service: string | undefined): string => {
+  if (!service) return ""
+
+  const map: Record<string, string> = {
+    "NETFLIX": "Netflix",
+    "HBO MAX": "HBO Max",
+    "SPOTIFY": "Spotify",
+    "CRUNCHYROLL": "Crunchyroll",
+    "DSTV": "DSTV",
+    "PRIME VIDEO": "Prime Video",
+    "DEEZER": "Deezer",
+    "APPLE MUSIC": "Apple Music",
+    "TIDAL": "Tidal",
+    "AUDIOMACK": "Audiomack",
+    "FUBO": "FUBO",
+    "FOX": "FOX",
+    "MAX": "Max",
+  }
+
+  return map[service.toUpperCase()] || service
 }
 
 const STATUS_STYLES: Record<string, string> = {
@@ -40,7 +68,7 @@ const SERVICE_LOGOS: Record<string, string> = {
 
 function getLogo(order: Order): string | null {
   const key =
-    order.service ||
+    order.metadata?.service ||
     Object.keys(SERVICE_LOGOS).find((s) => order.subscriptionName?.toLowerCase().includes(s.toLowerCase()))
   return key ? SERVICE_LOGOS[key] || null : null
 }
@@ -113,7 +141,9 @@ function CredentialRow({ label, value, masked }: { label: string; value: string;
 }
 export default function MyOrdersPage() {
   const [page, setPage] = useState(1)
-
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["myOrders", page],
     queryFn: async () => {
@@ -137,6 +167,7 @@ export default function MyOrdersPage() {
     refetchOnWindowFocus: false,
   })
 
+  const isActive = (path: string) => (path === "/" ? pathname === "/" : pathname?.startsWith(path))
   const orders: Order[] = data?.orders || []
   const pagination = data?.pagination || { page: 1, pages: 1, total: 0 }
   const noSession = data?.noSession
@@ -154,6 +185,12 @@ export default function MyOrdersPage() {
             <Link href="/support" className="text-sm font-medium text-slate-600 hover:text-[#262626] flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Support
             </Link>
+            <Link href="/track-order" className="text-sm font-medium text-slate-600 hover:text-[#262626] flex items-center gap-1">
+              <HelpCircle className="h-4 w-4" /> Track Order
+            </Link>
+            <Link href="/complaints" className="text-sm font-medium text-slate-600 hover:text-[#262626] flex items-center gap-1">
+              <HelpCircle className="h-4 w-4" /> Complaints
+            </Link>
           </nav>
           <div className="sm:hidden">
             <Sheet>
@@ -164,6 +201,8 @@ export default function MyOrdersPage() {
                 <nav className="flex-1 px-4 py-6 space-y-2">
                   <Link href="/track-order" className="block px-4 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Track Orders</Link>
                   <Link href="/support" className="block px-4 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Support</Link>
+                  <Link href="/complaints" className="block px-4 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Complaints</Link>
+                  <Link href="/recent-orders" className="block px-4 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-100">Recent Orders</Link>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -198,18 +237,14 @@ export default function MyOrdersPage() {
           <>
             <div className="space-y-3">
               {orders.map((order) => {
-                const logo = getLogo(order)
                 return (
                   <Card key={order.reference} className="p-4">
                     <div className="flex items-start gap-3">
-                      {/* Brand avatar — rounded #262626 */}
-                      <div className="w-11 h-11 rounded-full bg-[#262626] flex items-center justify-center shrink-0">
-                        {logo ? (
-                          <img src={logo} alt="" className="w-5 h-5" />
-                        ) : (
-                          <i className="fa-solid fa-play text-white text-lg" />
-                        )}
-                      </div>
+                      {/* Use ServiceAvatar instead */}
+                      <ServiceAvatar
+                        service={normalizeService(order.metadata?.service)}
+                        size="md"
+                      />
 
                       <div className="flex items-start justify-between gap-3 flex-1 min-w-0">
                         <div className="min-w-0">

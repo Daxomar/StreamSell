@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { useUser } from "../../contexts/UserContext"
 import { api } from "@/lib/api"
-
+import { ServiceAvatar } from "../../admin/subscriptions/page"  // Reuse the ServiceAvatar component from admin subscriptions page
 const formatCurrency = (amount) => `GHS ${amount?.toFixed(2) || "0.00"}`
 
 export default function ResellerPricingPage() {
@@ -346,9 +346,12 @@ export default function ResellerPricingPage() {
                     return (
                       <tr key={sub._id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <p className="font-medium text-gray-900">{sub.name}</p>
-                            <p className="text-xs text-gray-500">{sub.plan}{sub.duration ? ` • ${sub.duration}` : ""}</p>
+                          <div className="min-w-0 flex gap-2 items-center">
+                            <ServiceAvatar service={sub.service} size="lg" />
+                            <div>
+                              <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
+                              <p className="text-xs text-slate-400 font-mono">{sub.plan}{sub.duration ? ` • ${sub.duration}` : ""}</p>
+                            </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

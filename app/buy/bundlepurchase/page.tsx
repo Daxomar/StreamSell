@@ -459,6 +459,7 @@ import Link from "next/link"
 import { useResellerCode } from "@/app/contexts/ResellerCodeContext"
 import toast from "react-hot-toast"
 import { useQuery } from "@tanstack/react-query"
+import { SERVICE_CONFIG } from "@/app/admin/subscriptions/page"
 
 // remove: const MOOLRE_FEES = 0.03
 
@@ -490,7 +491,7 @@ type Subscription = {
   imageUrl?: string
   price: number
   isActive: boolean
-  supportDevice:string
+  supportDevice: string
 }
 
 type PaymentData = { status?: string; txstatus?: number; reference?: string; amount?: number;[key: string]: any }
@@ -561,14 +562,14 @@ export default function BuyPage() {
     setVerifying(true)
     setError(null)
     try {
-    const response = await fetch(
-  `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/verify/${reference}`,
-  {
-    method: "GET",
-    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
-    credentials: "include",   // ← stores the Set-Cookie from verify (the device cookie)
-  }
-)
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/verify/${reference}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
+          credentials: "include",   // ← stores the Set-Cookie from verify (the device cookie)
+        }
+      )
       const data = await response.json()
 
       // Moolre verify service returns: { status, reference, txstatus, paid, failed, pending, raw }
@@ -664,7 +665,8 @@ export default function BuyPage() {
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-lg text-slate-900">StreamHub</span>
+            <img src="/streamselllogo3.jpeg" alt="Logo" className="w-12 h-12 " />
+            <span className="font-bold text-lg text-slate-900">Streamsell</span>
           </div>
           <nav className="hidden sm:flex items-center gap-4">
             <Link href="/track-order" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
@@ -673,8 +675,11 @@ export default function BuyPage() {
             <Link href="/support" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Support
             </Link>
-             <Link href="/recent-orders" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
+            <Link href="/recent-orders" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Recent Orders
+            </Link>
+            <Link href="/complaints" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
+              <HelpCircle className="h-4 w-4" /> Complaints
             </Link>
           </nav>
           <div className="sm:hidden">
@@ -695,6 +700,9 @@ export default function BuyPage() {
                   <Link href="/recent-orders" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
                     Recent Orders
                   </Link>
+                  <Link href="/complaints" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/complaints") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
+                    Complaints
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -705,23 +713,7 @@ export default function BuyPage() {
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md py-8">
           {/* Brand + contact */}
-          <Card className="border-0 shadow-none bg-transparent w-full">
-            <CardContent className="p-3 flex items-center justify-between w-full">
-              <div className="flex flex-col items-center gap-2 w-full">
-                <div className="p-2">
-                  <i className="fa-solid fa-play text-5xl text-[#262626]" />
-                </div>
-                <div className="flex gap-4">
-                  <a href="https://wa.me/233555322276?text=Hello%2C%20I%20need%20help%20with%20my%20StreamHub%20order." target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="bg-[#262626] hover:bg-[#3a3a3a] text-white">Customer Service</Button>
-                  </a>
-                  <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" className="bg-[#262626] hover:bg-[#3a3a3a] text-white">Join For Updates</Button>
-                  </a>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
 
           {/* Progress Steps */}
           <div className="flex justify-between mb-8 px-2">
@@ -741,28 +733,34 @@ export default function BuyPage() {
           <div className="border-2 border-[#262626] rounded-lg p-4 mb-6 bg-slate-50">
             <p className="text-sm font-semibold text-[#262626]">Delivery Information</p>
             <p className="text-sm mt-1 text-slate-600">
-              Your subscription details are sent by SMS after payment. Most orders are delivered within <strong>5 mins – 1 hour</strong>. In rare cases of delay it <strong>may</strong> take a little longer — don't worry, it's being processed.
+              Your subscription details will be sent to you via SMS. You can also check your <Link href="/recent-orders" className="text-[#262626] font-bold hover:underline">
+                recent orders
+              </Link> to retrieve them anytime.
+            </p>
+            <p className="text-sm mt-2 text-slate-600">
+              If anything goes wrong, you can file a complaint and we'll look into it right away.
             </p>
           </div>
 
-          {/* Warning */}
-          <div className="border-2 border-red-500 rounded-lg p-4 mb-6 bg-red-50 shadow-md">
-            <p className="text-sm font-bold text-red-700 flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5" /> Warning
-            </p>
-            <p className="text-sm mt-1 text-red-600 font-medium">
-              Report orders not received within <strong>24 hours</strong>. We cannot resolve reports made after 24 hours.
-            </p>
-          </div>
+
 
           <Card className="shadow-xl border-slate-100 ring-0">
             <CardHeader className="">
-              <CardTitle className="">
-                {step === 1 && "Choose a Service"}
-                {step === 2 && `${selectedService} Plans`}
-                {step === 3 && "Enter Details"}
-                {step === 4 && "Order Confirmed"}
-              </CardTitle>
+              <div className="flex items-center gap-3 mb-2">
+                {step === 2 && selectedService && SERVICE_CONFIG[selectedService as keyof typeof SERVICE_CONFIG] && (
+                  <img
+                    src={SERVICE_CONFIG[selectedService as keyof typeof SERVICE_CONFIG].logo}
+                    alt={selectedService}
+                    className="w-8 h-8 object-contain"
+                  />
+                )}
+                <CardTitle className="">
+                  {step === 1 && "Choose a Service"}
+                  {step === 2 && `${selectedService} Plans`}
+                  {step === 3 && "Enter Details"}
+                  {step === 4 && "Order Confirmed"}
+                </CardTitle>
+              </div>
               <CardDescription className="">
                 {step === 1 && "Which streaming service do you want?"}
                 {step === 2 && `Available plans for ${selectedService}`}
@@ -783,7 +781,7 @@ export default function BuyPage() {
                     <p className="text-center text-slate-500 py-8">No services available right now.</p>
                   ) : (
                     <div className="grid grid-cols-1 gap-3">
-                      {services.map((service) => {
+                      {/* {services.map((service) => {
                         const style = getServiceStyle(service)
                         return (
                           <button
@@ -792,6 +790,25 @@ export default function BuyPage() {
                             className={cn("flex items-center p-4 rounded-xl border-2 border-transparent transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm", style.bg)}
                           >
                             <i className={cn(style.icon, "text-2xl mr-3")} style={{ color: style.color }} />
+                            <span className="font-bold text-lg">{service}</span>
+                          </button>
+                        )
+                      })} */}
+
+                      {services.map((service) => {
+                        const config = SERVICE_CONFIG[service as keyof typeof SERVICE_CONFIG]
+
+                        return (
+                          <button
+                            key={service}
+                            onClick={() => handleServiceSelect(service)}
+                            className="flex items-center gap-3 p-4 rounded-xl border-2 border-transparent transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm"
+                          >
+                            <img
+                              src={config?.logo}
+                              alt={service}
+                              className="w-10 h-10 object-contain"
+                            />
                             <span className="font-bold text-lg">{service}</span>
                           </button>
                         )

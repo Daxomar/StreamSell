@@ -16,6 +16,8 @@ import {
     ItemTitle,
 } from "@/components/ui/item"
 import EmptyPage from "../ui/emptyPageButton"
+import { ServiceAvatar } from "../../app/admin/subscriptions/page"
+import { normalizeService } from "../../app/recent-orders/page"
 
 export function ItemList({ transactions = [] }) {
     // Network colors for badge display
@@ -65,13 +67,10 @@ export function ItemList({ transactions = [] }) {
                     className="border-slate-200/50 bg-white/40 lg:backdrop-blur-sm shadow-md hover:shadow-lg transition-all">
                     {/* Service Badge */}
                     <ItemMedia>
-                        <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white ${getNetworkColor(
-                                transaction.service
-                            )}`}
-                        >
-                            {transaction.service?.slice(0, 2).toUpperCase() || "??"}
-                        </div>
+                        <ServiceAvatar
+                            service={normalizeService(transaction.service)}
+                            size="md"
+                        />
                     </ItemMedia>
 
                     {/* Customer & Subscription Info */}

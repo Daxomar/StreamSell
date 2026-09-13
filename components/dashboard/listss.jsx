@@ -351,6 +351,8 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ServiceAvatar } from "@/app/admin/subscriptions/page"
+import { normalizeService } from "@/app/recent-orders/page"
 
 export function DropdownMenuAction() {
     return (
@@ -885,6 +887,7 @@ export function List({
     const usesCustomAction =
         type === "order" || type === "supplierPayout" || type === "resellerPayout"
 
+        console.log("items", items)
     return (
         <div>
             {/* ── Desktop ── */}
@@ -897,9 +900,10 @@ export function List({
                     >
                         <div className="w-full flex items-center p-2 gap-2">
                             <ItemMedia>
-                                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
-                                    {config.icon(row)}
-                                </div>
+                                <ServiceAvatar
+                                    service={normalizeService(row.service)}
+                                    size="md"
+                                />
                             </ItemMedia>
                             <ItemContent>
                                 <ItemTitle className="text-sm font-semibold">{config.title(row)}</ItemTitle>
@@ -942,9 +946,10 @@ export function List({
                         <div className="w-full flex items-start justify-between">
                             <div className="w-full flex items-center p-2 gap-2">
                                 <ItemMedia>
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs text-white bg-[#262626]">
-                                        {config.icon(row)}
-                                    </div>
+                                       <ServiceAvatar
+                                    service={normalizeService(row.service)}
+                                    size="md"
+                                />
                                 </ItemMedia>
                                 <ItemContent className="w-full flex flex-col gap-1">
                                     <ItemTitle className="flex items-center gap-2 text-[14px] font-semibold">

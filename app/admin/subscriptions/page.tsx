@@ -4,16 +4,121 @@ import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Edit2, Search, ArrowUpDown, Loader2,  } from "lucide-react"
+import { Plus, Edit2, Search, ArrowUpDown, Loader2, } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
 import { api } from "@/lib/api"
 import toast from "react-hot-toast"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+
+
+export const SERVICE_CONFIG = {
+  Netflix: {
+    logo: "https://cdn.simpleicons.org/netflix/E50914",
+    color: "",
+  },
+  "HBO Max": {
+    logo: "https://cdn.simpleicons.org/hbomax/000000",
+    color: "#000000",
+  },
+  Crunchyroll: {
+    logo: "https://cdn.simpleicons.org/crunchyroll/F47521",
+    color: "#F47521",
+  },
+  FUBO: {
+    logo: "https://cdn.simpleicons.org/fubo/0066CC",
+    color: "#0066CC",
+  },
+  FOX: {
+    logo: "https://cdn.simpleicons.org/fox/003366",
+    color: "#003366",
+  },
+  Max: {
+    logo: "https://cdn.simpleicons.org/maxdotcom/0066FF",
+    color: "#0066FF",
+  },
+  DSTV: {
+    logo: "/DSTV.png",
+    color: "#FFB81C",
+  },
+  "Prime Video": {
+    logo: "/primeLogo.png",
+    color: "#00A8E1",
+  },
+  Spotify: {
+    logo: "https://cdn.simpleicons.org/spotify/1DB954",
+    color: "#1DB954",
+  },
+  Deezer: {
+    logo: "https://cdn.simpleicons.org/deezer/FF0084",
+    color: "#FF0084",
+  },
+  
+  "Apple Music": {
+    logo: "https://cdn.simpleicons.org/applemusic/FA243C",
+    color: "#FA243C",
+  },
+  Tidal: {
+    logo: "https://cdn.simpleicons.org/tidal/000000",
+    color: "#000000",
+  },
+  Audiomack: {
+    logo: "https://cdn.simpleicons.org/audiomack/FF5722",
+    color: "#FF5722",
+  },
+};
+
+
+interface ServiceAvatarProps {
+  service: string;
+  size?: "sm" | "md" | "lg";
+}
+
+export const ServiceAvatar = ({ service, size = "md" }: ServiceAvatarProps) => {
+  const config = SERVICE_CONFIG[service as keyof typeof SERVICE_CONFIG];
+
+  const sizeClasses = {
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-12 h-12",
+  };
+
+  if (!config) {
+    return (
+      <div className={`rounded-full bg-slate-300 text-slate-700 font-bold flex items-center justify-center ${sizeClasses[size]}`}>
+        {service.slice(0, 2).toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`rounded-full flex items-center justify-center ${sizeClasses[size]} flex-shrink-0 p-1`}
+      // style={{ backgroundColor: config.color }}
+    >
+      {/* <Image
+        src={config.logo}
+        alt={service}
+        width={40}
+        height={40}
+        className="w-full h-full object-contain"
+      /> */}
+
+          <img
+        src={config.logo}
+        alt={service}
+        width={40}
+        height={40}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  );
+};
 
 export default function SubscriptionsPage() {
   const router = useRouter()
@@ -74,152 +179,10 @@ export default function SubscriptionsPage() {
     )
   }
 
-  // return (
-  //   <div className="space-y-6">
-  //     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-  //       <div>
-  //         <h2 className="text-2xl font-bold tracking-tight">Subscriptions</h2>
-  //         <p className="text-sm text-slate-500">Manage subscription offerings, pricing, and availability.</p>
-  //       </div>
-  //       <Button onClick={handleAddNew} className="bg-green-600 hover:bg-green-700 text-white font-semibold">
-  //         <Plus className="mr-2 h-4 w-4" />
-  //         Add New Subscription
-  //       </Button>
-  //     </div>
 
-  //     <Card className="">
-  //       <CardHeader className="pb-4">
-  //         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-  //           <div>
-  //             <CardTitle className="">Subscription Plans</CardTitle>
-  //             <CardDescription className="">View and maintain active subscription plans.</CardDescription>
-  //           </div>
-  //           <div className="flex flex-wrap items-center gap-2">
-  //             <div className="relative w-full sm:w-56">
-  //               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-  //               <Input
-  //                 placeholder="Search subscriptions..."
-  //                 className="pl-8"
-  //                 value={searchQuery}
-  //                 onChange={(e) => setSearchQuery(e.target.value)}
-  //               />
-  //             </div>
 
-  //             <Select value={serviceFilter} onValueChange={setServiceFilter}>
-  //               <SelectTrigger className="w-44">
-  //                 <SelectValue placeholder="Service" />
-  //               </SelectTrigger>
-  //               <SelectContent className="">
-  //                 <SelectItem className="" value="all">All Services</SelectItem>
-  //                 <SelectItem className="" value="Netflix">Netflix</SelectItem>
-  //                 <SelectItem className="" value="Spotify">Spotify</SelectItem>
-  //                 <SelectItem className="" value="HBO Max">HBO Max</SelectItem>
-  //                 <SelectItem className="" value="Disney+">Disney+</SelectItem>
-  //                 <SelectItem className="" value="YouTube">YouTube</SelectItem>
-  //               </SelectContent>
-  //             </Select>
 
-  //             <Select value={sortBy} onValueChange={setSortBy}>
-  //               <SelectTrigger className="w-32">
-  //                 <SelectValue placeholder="Sort by" />
-  //               </SelectTrigger>
-  //               <SelectContent className="">
-  //                 <SelectItem className="" value="name">Name</SelectItem>
-  //                 <SelectItem className="" value="price">Price</SelectItem>
-  //                 <SelectItem className="" value="plan">Plan</SelectItem>
-  //               </SelectContent>
-  //             </Select>
 
-  //             <Button
-  //               variant="outline"
-  //               size="icon"
-  //               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-  //             >
-  //               <ArrowUpDown className="h-4 w-4" />
-  //             </Button>
-  //           </div>
-  //         </div>
-  //       </CardHeader>
-
-  //       <CardContent className="">
-  //         {isLoading ? (
-  //           <div className="flex justify-center py-8">
-  //             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-  //           </div>
-  //         ) : (
-  //           <div className="overflow-x-auto">
-  //             <Table className="">
-  //               <TableHeader className="">
-  //                 <TableRow className="">
-  //                   <TableHead className="whitespace-nowrap">ID</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Name</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Service</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Plan</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Cost</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Price</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Duration</TableHead>
-  //                   <TableHead className="whitespace-nowrap">Status</TableHead>
-  //                   <TableHead className="text-right whitespace-nowrap">Actions</TableHead>
-  //                 </TableRow>
-  //               </TableHeader>
-  //               <TableBody className="">
-  //                 {filtered.length === 0 ? (
-  //                   <TableRow className="">
-  //                     <TableCell colSpan={9} className="text-center py-8 text-slate-500">
-  //                       No subscriptions found
-  //                     </TableCell>
-  //                   </TableRow>
-  //                 ) : (
-  //                   filtered.map((sub: any) => (
-  //                     <TableRow className="" key={sub._id}>
-  //                       <TableCell className="whitespace-nowrap">{sub.subscription_id}</TableCell>
-  //                       <TableCell className="font-medium whitespace-nowrap">{sub.name}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">{sub.service}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">{sub.plan}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">{formatCurrency(sub.costPrice)}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">{formatCurrency(sub.sellingPrice)}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">{sub.duration}</TableCell>
-  //                       <TableCell className="whitespace-nowrap">
-  //                         <div className="flex items-center gap-2">
-  //                           <Switch
-  //                             className="border-2 border-[#949596]"
-  //                             checked={sub.isActive}
-  //                             onCheckedChange={() => handleToggleActive(sub)}
-  //                             disabled={toggleActiveMutation.isPending}
-  //                           />
-  //                           <Badge
-  //                             variant={sub.isActive ? "default" : "secondary"}
-  //                             className={
-  //                               sub.isActive
-  //                                 ? "bg-green-500 hover:bg-green-600 text-white font-semibold"
-  //                                 : "bg-slate-200 text-slate-600"
-  //                             }
-  //                           >
-  //                             {sub.isActive ? "Active" : "Inactive"}
-  //                           </Badge>
-  //                         </div>
-  //                       </TableCell>
-  //                       <TableCell className="text-right whitespace-nowrap">
-  //                         <Button
-  //                           size="icon"
-  //                           variant="ghost"
-  //                           className="h-8 w-8 hover:bg-slate-100"
-  //                           onClick={() => handleEdit(sub)}
-  //                         >
-  //                           <Edit2 className="h-4 w-4 text-slate-600" />
-  //                         </Button>
-  //                       </TableCell>
-  //                     </TableRow>
-  //                   ))
-  //                 )}
-  //               </TableBody>
-  //             </Table>
-  //           </div>
-  //         )}
-  //       </CardContent>
-  //     </Card>
-  //   </div>
-  // )
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -257,7 +220,7 @@ export default function SubscriptionsPage() {
             </SelectTrigger>
             <SelectContent className="border border-black/5">
               <SelectItem className="" value="all">All Services</SelectItem>
-              <SelectItem  className="" value="Netflix">Netflix</SelectItem>
+              <SelectItem className="" value="Netflix">Netflix</SelectItem>
               <SelectItem className="" value="Spotify">Spotify</SelectItem>
               <SelectItem className="" value="HBO Max">HBO Max</SelectItem>
               <SelectItem className="" value="Disney+">Disney+</SelectItem>
@@ -313,12 +276,19 @@ export default function SubscriptionsPage() {
               className="rounded-xl bg-white/40 backdrop-blur-sm shadow-md hover:shadow-lg transition-all p-4"
             >
               {/* Desktop row */}
+              {/* Desktop row */}
               <div className="hidden lg:grid grid-cols-[1.5fr_1fr_1fr_0.8fr_0.8fr_1fr_auto] gap-4 items-center">
-                <div className="min-w-0">
-                  <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
-                  <p className="text-xs text-slate-400 font-mono">{sub.subscription_id}</p>
+                <div className="min-w-0 flex gap-2 items-center">
+                  <ServiceAvatar service={sub.service} size="lg" />
+                  <div>
+                    <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
+                    <p className="text-xs text-slate-400 font-mono">{sub.subscription_id}</p>
+                  </div>
+
                 </div>
-                <span className="text-sm text-slate-700">{sub.service}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-700">{sub.service}</span>
+                </div>
                 <span className="text-sm text-slate-700">{sub.plan}</span>
                 <span className="text-sm text-slate-700">{formatCurrency(sub.costPrice)}</span>
                 <span className="text-sm font-semibold text-[#262626]">{formatCurrency(sub.sellingPrice)}</span>
@@ -329,7 +299,7 @@ export default function SubscriptionsPage() {
                     onCheckedChange={() => handleToggleActive(sub)}
                     disabled={toggleActiveMutation.isPending}
                   />
-                      <Badge
+                  <Badge
                     variant={sub.isActive ? "default" : "secondary"}
                     className={
                       sub.isActive
@@ -358,7 +328,10 @@ export default function SubscriptionsPage() {
                   <div className="min-w-0">
                     <p className="font-semibold text-slate-900 truncate">{sub.name}</p>
                     <p className="text-xs text-slate-400 font-mono mt-0.5">{sub.subscription_id}</p>
-                    <p className="text-sm text-slate-500 mt-1">{sub.service} · {sub.plan}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <ServiceAvatar service={sub.service} size="sm" />
+                      <p className="text-sm text-slate-500">{sub.service} · {sub.plan}</p>
+                    </div>
                   </div>
                   <Button
                     size="icon"

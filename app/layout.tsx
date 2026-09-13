@@ -7,10 +7,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "StreamHub | Streaming Subscription",
-  description: "Fast, affordable mobile data bundles for MTN, Telecel, and AT. You will receive your data in 2-3 hours.",
+  title: "StreamSell | Streaming Subscriptions",
+  description: "Get Netflix, Spotify, HBO Max, and more streaming subscriptions delivered instantly via SMS. Fast, affordable, and reliable.",
   icons: {
-    icon: "/logo.jpg",
+    icon: "/streamselllogo3.jpeg",
   },
   generator: 'v0.app'
 }
