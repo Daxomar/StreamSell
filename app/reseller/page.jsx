@@ -301,6 +301,7 @@ import { useQuery } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { useUser } from "../contexts/UserContext"
 import { api } from "../../lib/api"
+import Link from "next/link"
 
 export default function ResellerDashboard() {
   const [copied, setCopied] = useState(false)
@@ -374,6 +375,11 @@ export default function ResellerDashboard() {
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
           <p className="text-slate-500">{reseller?.name}</p>
+          <Button className="mt-2 bg-[#262626] hover:bg-[#3a3a3a] text-white">
+            <Link href={`/buy/streamsellpurchase?resellerCode=${reseller?.resellerCode}`} className="flex items-center gap-2 w-full md:max-w-[200px] justify-center">
+              Buy for self
+            </Link> 
+          </Button>
         </div>
 
         <Card className="w-full md:w-auto min-w-0 bg-slate-50 border-none shadow-none">

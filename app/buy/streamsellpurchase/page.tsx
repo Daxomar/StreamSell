@@ -602,7 +602,7 @@ export default function BuyPage() {
     // Moolre may append externalref or reference — check both
     const reference = searchParams.get("externalref") || searchParams.get("reference")
     if (reference) {
-      router.replace(`/buy/bundlepurchase?resellerCode=${resellerCode}`)
+      router.replace(`/buy/streamsellpurchase?resellerCode=${resellerCode}`)
       verifyPayment(reference)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -635,7 +635,7 @@ export default function BuyPage() {
           // callback_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/webhook`,
           // redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/bundlepurchase?resellerCode=${resellerCode}`,
           callback_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/payments/moolre/webhook`,
-          redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/bundlepurchase?resellerCode=${resellerCode}`,
+          redirect_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/buy/streamsellpurchase?resellerCode=${resellerCode}`,
         }),
       })
 

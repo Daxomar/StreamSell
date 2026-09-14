@@ -90,7 +90,7 @@ export default function TrackOrderPage() {
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <span className="font-bold text-xl text-slate-900">StreamHub</span>
-          <Link href="/buy/bundlepurchase">
+          <Link href="/buy/streamsellpurchase">
             <Button variant="ghost" size="sm" className="">
               <Home className="mr-2 h-4 w-4" />
               Buy Subscription

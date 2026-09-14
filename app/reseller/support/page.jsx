@@ -347,7 +347,7 @@ export default function SupportPage() {
 
           {/* Back to Home */}
           <div className="mt-8 text-center">
-            <Link href="/buy/bundlepurchase">
+            <Link href="/buy/streamsellpurchase">
               <Button className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold" size="lg">
                 <Home className="mr-2 h-4 w-4" />
                 Back to Home

@@ -175,7 +175,7 @@ export default function MyOrdersPage() {
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/buy/bundlepurchase" className="font-bold text-lg text-slate-900">StreamHub</Link>
+          <Link href="/buy/streamsellpurchase" className="font-bold text-lg text-slate-900">StreamHub</Link>
           <nav className="hidden sm:flex items-center gap-4">
             <Link href="/track-order" className="text-sm font-medium text-slate-600 hover:text-[#262626] flex items-center gap-1">
               <Search className="h-4 w-4" /> Track Order
@@ -227,7 +227,7 @@ export default function MyOrdersPage() {
             <PackageOpen className="h-10 w-10 text-slate-300 mx-auto mb-3" />
             <p className="font-medium text-slate-700">No orders on this device yet</p>
             <p className="text-sm text-slate-500 mt-1">Orders you buy on this device will appear here.</p>
-            <Link href="/buy/bundlepurchase">
+            <Link href="/buy/streamsellpurchase">
               <Button className="mt-5 bg-[#262626] hover:bg-[#3a3a3a] text-white">Browse Subscriptions</Button>
             </Link>
           </Card>
