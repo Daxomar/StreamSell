@@ -10,7 +10,7 @@ export const metadata = {
   title: "StreamSell | Streaming Subscriptions",
   description: "Get Netflix, Spotify, HBO Max, and more streaming subscriptions delivered instantly via SMS. Fast, affordable, and reliable.",
   icons: {
-    icon: "/streamselllogo3.jpeg",
+    icon: "/stream-sell-white-exact.svg",
   },
   generator: 'v0.app'
 }
