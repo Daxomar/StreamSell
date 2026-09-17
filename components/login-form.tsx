@@ -16,6 +16,7 @@ import {
   FieldSeparator,
 } from "./ui/field"
 import { signIn } from "../lib/auth-client"
+import { Eye, EyeOff } from "lucide-react"
 // Login validation schema
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -109,7 +110,7 @@ export function LoginForm() {
             />
             {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
           </div>
-          <div className="grid gap-2">
+          <div className="grid gap-2 w-full">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -139,11 +140,15 @@ export function LoginForm() {
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+              className="absolute right-0 top-0 h-full px-3 hover:bg-transparent  "
               onClick={() => setShowPassword(!showPassword)}
               disabled={isLoading}
             >
-              {showPassword ? <span className="sr-only">Hide password</span> : <span className="sr-only">Show password</span>}
+              {showPassword ? (
+                <EyeOff className="w-4 h-4 text-slate-500" />
+              ) : (
+                <Eye className="w-4 h-4 text-slate-500" />
+              )}
             </Button>
             {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
           </div>
