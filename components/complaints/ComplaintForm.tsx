@@ -94,7 +94,7 @@ export const ComplaintForm = ({ onSuccess, isPublic = true }: ComplaintFormProps
             Transaction Reference
           </label>
           <Input
-            placeholder="e.g., ABC123XYZ"
+            placeholder="e.g., SUBpay_.."
             value={transactionRef}
             onChange={(e) => setTransactionRef(e.target.value)}
             className="text-sm h-9"
@@ -147,7 +147,7 @@ export const ComplaintForm = ({ onSuccess, isPublic = true }: ComplaintFormProps
         <div>
           <label className="text-xs font-medium text-slate-600 mb-1.5 block">Your Phone Number</label>
           <Input
-            placeholder="e.g., 0555322276"
+            placeholder="e.g., 05785...."
             value={customerPhone}
             onChange={(e) => setCustomerPhone(e.target.value)}
             className="text-sm h-9"

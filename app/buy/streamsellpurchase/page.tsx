@@ -669,12 +669,12 @@ export default function BuyPage() {
             <span className="font-bold text-lg text-slate-900">Streamsell</span>
           </div>
           <nav className="hidden sm:flex items-center gap-4">
-            <Link href="/track-order" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
+            {/* <Link href="/track-order" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <Search className="h-4 w-4" /> Track Order
-            </Link>
-            <Link href="/support" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
+            </Link> */}
+            {/* <Link href="/support" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Support
-            </Link>
+            </Link> */}
             <Link href="/recent-orders" className="text-sm font-medium text-slate-600 hover:text-[#262626] transition-colors flex items-center gap-1">
               <HelpCircle className="h-4 w-4" /> Recent Orders
             </Link>
@@ -691,13 +691,13 @@ export default function BuyPage() {
               </SheetTrigger>
               <SheetContent side="right" className="w-72 p-0 bg-white">
                 <nav className="flex-1 px-4 py-6 space-y-2">
-                  <Link href="/track-order" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/track-order") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
+                  {/* <Link href="/track-order" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/track-order") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
                     Track Orders
-                  </Link>
-                  <Link href="/support" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
+                  </Link> */}
+                  {/* <Link href="/support" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
                     Support
-                  </Link>
-                  <Link href="/recent-orders" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/support") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
+                  </Link> */}
+                  <Link href="/recent-orders" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/recent-orders") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
                     Recent Orders
                   </Link>
                   <Link href="/complaints" className={cn("block px-4 py-3 rounded-lg font-medium transition-all", isActive("/complaints") ? "bg-slate-100 text-[#262626] border-l-4 border-[#262626]" : "text-slate-700 hover:bg-slate-100")}>
